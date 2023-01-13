@@ -1,6 +1,6 @@
 <?php
 
-// This file is part of Moodle - http://moodle.org/
+// This Syllabusis part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
 $string['clicktodownload'] = 'Click {$a} link to download the file.';
 $string['clicktoopen2'] = 'Click {$a} link to view the file.';
 $string['configdisplayoptions'] = 'Select all options that should be available, existing settings are not modified. Hold CTRL key to select multiple fields.';
-$string['configframesize'] = 'When a web page or an uploaded file is displayed within a frame, this value is the height (in pixels) of the top frame (which contains the navigation).';
+$string['configframesize'] = 'When a web page or an uploaded Syllabusis displayed within a frame, this value is the height (in pixels) of the top frame (which contains the navigation).';
 $string['configparametersettings'] = 'This sets the default value for the Parameter settings pane in the form when adding some new syllabuss. After the first time, this becomes an individual user preference.';
 $string['configpopup'] = 'When adding a new syllabus which is able to be shown in a popup window, should this option be enabled by default?';
 $string['configpopupdirectories'] = 'Should popup windows show directory links by default?';
@@ -41,45 +41,45 @@ $string['configpopupwidth'] = 'What width should be the default width for new po
 $string['contentheader'] = 'Content';
 $string['displayoptions'] = 'Available display options';
 $string['displayselect'] = 'Display';
-$string['displayselect_help'] = 'This setting, together with the file type and whether the browser allows embedding, determines how the file is displayed. Options may include:
+$string['displayselect_help'] = 'This setting, together with the Syllabustype and whether the browser allows embedding, determines how the Syllabusis displayed. Options may include:
 
-* Automatic - The best display option for the file type is selected automatically
-* Embed - The file is displayed within the page below the navigation bar together with the file description and any blocks
+* Automatic - The best display option for the Syllabustype is selected automatically
+* Embed - The Syllabusis displayed within the page below the navigation bar together with the Syllabusdescription and any blocks
 * Force download - The user is prompted to download the file
-* Open - Only the file is displayed in the browser window
-* In pop-up - The file is displayed in a new browser window without menus or an address bar
-* In frame - The file is displayed within a frame below the navigation bar and file description
-* New window - The file is displayed in a new browser window with menus and an address bar';
+* Open - Only the Syllabusis displayed in the browser window
+* In pop-up - The Syllabusis displayed in a new browser window without menus or an address bar
+* In frame - The Syllabusis displayed within a frame below the navigation bar and Syllabusdescription
+* New window - The Syllabusis displayed in a new browser window with menus and an address bar';
 $string['displayselect_link'] = 'mod/file/mod';
 $string['displayselectexplain'] = 'Choose display type, unfortunately not all types are suitable for all files.';
-$string['dnduploadsyllabus'] = 'Create file syllabus';
+$string['dnduploadsyllabus'] = 'Create Syllabussyllabus';
 $string['encryptedcode'] = 'Encrypted code';
-$string['filenotfound'] = 'File not found, sorry.';
-$string['filterfiles'] = 'Use filters on file content';
-$string['filterfilesexplain'] = 'Select type of file content filtering, please note this may cause problems for some Flash and Java applets. Please make sure that all text files are in UTF-8 encoding.';
+$string['filenotfound'] = 'Syllabusnot found, sorry.';
+$string['filterfiles'] = 'Use filters on Syllabuscontent';
+$string['filterfilesexplain'] = 'Select type of Syllabuscontent filtering, please note this may cause problems for some Flash and Java applets. Please make sure that all text files are in UTF-8 encoding.';
 $string['filtername'] = 'syllabus names auto-linking';
 $string['forcedownload'] = 'Force download';
 $string['framesize'] = 'Frame height';
-$string['indicator:cognitivedepth'] = 'File cognitive';
-$string['indicator:cognitivedepth_help'] = 'This indicator is based on the cognitive depth reached by the student in a File syllabus.';
-$string['indicator:cognitivedepthdef'] = 'File cognitive';
-$string['indicator:cognitivedepthdef_help'] = 'The participant has reached this percentage of the cognitive engagement offered by the File syllabuss during this analysis interval (Levels = No view, View)';
+$string['indicator:cognitivedepth'] = 'Syllabuscognitive';
+$string['indicator:cognitivedepth_help'] = 'This indicator is based on the cognitive depth reached by the student in a Syllabussyllabus.';
+$string['indicator:cognitivedepthdef'] = 'Syllabuscognitive';
+$string['indicator:cognitivedepthdef_help'] = 'The participant has reached this percentage of the cognitive engagement offered by the Syllabussyllabuss during this analysis interval (Levels = No view, View)';
 $string['indicator:cognitivedepthdef_link'] = 'Learning_analytics_indicators#Cognitive_depth';
-$string['indicator:socialbreadth'] = 'File social';
-$string['indicator:socialbreadth_help'] = 'This indicator is based on the social breadth reached by the student in a File syllabus.';
-$string['indicator:socialbreadthdef'] = 'File social';
-$string['indicator:socialbreadthdef_help'] = 'The participant has reached this percentage of the social engagement offered by the File syllabuss during this analysis interval (Levels = No participation, Participant alone)';
+$string['indicator:socialbreadth'] = 'Syllabussocial';
+$string['indicator:socialbreadth_help'] = 'This indicator is based on the social breadth reached by the student in a Syllabussyllabus.';
+$string['indicator:socialbreadthdef'] = 'Syllabussocial';
+$string['indicator:socialbreadthdef_help'] = 'The participant has reached this percentage of the social engagement offered by the Syllabussyllabuss during this analysis interval (Levels = No participation, Participant alone)';
 $string['indicator:socialbreadthdef_link'] = 'Learning_analytics_indicators#Social_breadth';
 $string['legacyfiles'] = 'Migration of old course file';
 $string['legacyfilesactive'] = 'Active';
 $string['legacyfilesdone'] = 'Finished';
 $string['modifieddate'] = 'Modified {$a}';
 $string['modulename'] = 'File';
-$string['modulename_help'] = 'The file module enables a teacher to provide a file as a course syllabus. Where possible, the file will be displayed within the course interface; otherwise students will be prompted to download it. The file may include supporting files, for example an HTML page may have embedded images.
+$string['modulename_help'] = 'The Syllabusmodule enables a teacher to provide a Syllabusas a course syllabus. Where possible, the Syllabuswill be displayed within the course interface; otherwise students will be prompted to download it. The Syllabusmay include supporting files, for example an HTML page may have embedded images.
 
 Note that students need to have the appropriate software on their computers in order to open the file.
 
-A file may be used
+A Syllabusmay be used
 
 * To share presentations given in class
 * To include a mini website as a course syllabus
@@ -88,9 +88,9 @@ $string['modulename_link'] = 'mod/syllabus/view';
 $string['modulenameplural'] = 'Files';
 $string['notmigrated'] = 'This legacy syllabus type ({$a}) was not yet migrated, sorry.';
 $string['optionsheader'] = 'Display options';
-$string['page-mod-syllabus-x'] = 'Any file module page';
-$string['pluginadministration'] = 'File module administration';
-$string['pluginname'] = 'File';
+$string['page-mod-syllabus-x'] = 'Any Syllabusmodule page';
+$string['pluginadministration'] = 'Syllabus module administration';
+$string['pluginname'] = 'Syllabus';
 $string['popupheight'] = 'Pop-up height (in pixels)';
 $string['popupheightexplain'] = 'Specifies default height of popup windows.';
 $string['popupsyllabus'] = 'This syllabus should appear in a popup window.';
@@ -99,7 +99,7 @@ $string['popupwidth'] = 'Pop-up width (in pixels)';
 $string['popupwidthexplain'] = 'Specifies default width of popup windows.';
 $string['printintro'] = 'Display syllabus description';
 $string['printintroexplain'] = 'Display syllabus description below content? Some display types may not display description even if enabled.';
-$string['privacy:metadata'] = 'The File syllabus plugin does not store any personal data.';
+$string['privacy:metadata'] = 'The Syllabussyllabus plugin does not store any personal data.';
 $string['syllabus:addinstance'] = 'Add a new syllabus';
 $string['syllabuscontent'] = 'Files and subfolders';
 $string['syllabusdetails_sizetype'] = '{$a->size} {$a->type}';
@@ -109,22 +109,22 @@ $string['syllabusdetails_sizetypedate'] = '{$a->size} {$a->type} {$a->date}';
 $string['syllabus:exportsyllabus'] = 'Export syllabus';
 $string['syllabus:view'] = 'View syllabus';
 $string['search:activity'] = 'File';
-$string['selectmainfile'] = 'Please select the main file by clicking the icon next to file name.';
+$string['selectmainfile'] = 'Please select the main Syllabusby clicking the icon next to Syllabusname.';
 $string['showdate'] = 'Show upload/modified date';
 $string['showdate_desc'] = 'Display upload/modified date on course page?';
 $string['showdate_help'] = 'Displays the upload/modified date beside links to the file.
 
-If there are multiple files in this syllabus, the start file upload/modified date is displayed.';
+If there are multiple files in this syllabus, the start Syllabusupload/modified date is displayed.';
 $string['showsize'] = 'Show size';
-$string['showsize_help'] = 'Displays the file size, such as \'3.1 MB\', beside links to the file.
+$string['showsize_help'] = 'Displays the Syllabussize, such as \'3.1 MB\', beside links to the file.
 
 If there are multiple files in this syllabus, the total size of all files is displayed.';
-$string['showsize_desc'] = 'Display file size on course page?';
+$string['showsize_desc'] = 'Display Syllabussize on course page?';
 $string['showtype'] = 'Show type';
-$string['showtype_desc'] = 'Display file type (e.g. \'Word document\') on course page?';
+$string['showtype_desc'] = 'Display Syllabustype (e.g. \'Word document\') on course page?';
 $string['showtype_help'] = 'Displays the type of the file, such as \'Word document\', beside links to the file.
 
-If there are multiple files in this syllabus, the start file type is displayed.
+If there are multiple files in this syllabus, the start Syllabustype is displayed.
 
-If the file type is not known to the system, it will not display.';
+If the Syllabustype is not known to the system, it will not display.';
 $string['uploadeddate'] = 'Uploaded {$a}';
