@@ -50,7 +50,7 @@ $string['displayselect_help'] = 'This setting, together with the Syllabustype an
 * In pop-up - The Syllabusis displayed in a new browser window without menus or an address bar
 * In frame - The Syllabusis displayed within a frame below the navigation bar and Syllabusdescription
 * New window - The Syllabusis displayed in a new browser window with menus and an address bar';
-$string['displayselect_link'] = 'mod/file/mod';
+$string['displayselect_link'] = 'mod/syllabus/mod';
 $string['displayselectexplain'] = 'Choose display type, unfortunately not all types are suitable for all files.';
 $string['dnduploadsyllabus'] = 'Create Syllabussyllabus';
 $string['encryptedcode'] = 'Encrypted code';
@@ -74,7 +74,7 @@ $string['legacyfiles'] = 'Migration of old course file';
 $string['legacyfilesactive'] = 'Active';
 $string['legacyfilesdone'] = 'Finished';
 $string['modifieddate'] = 'Modified {$a}';
-$string['modulename'] = 'File';
+$string['modulename'] = 'Syllabus';
 $string['modulename_help'] = 'The Syllabusmodule enables a teacher to provide a Syllabusas a course syllabus. Where possible, the Syllabuswill be displayed within the course interface; otherwise students will be prompted to download it. The Syllabusmay include supporting files, for example an HTML page may have embedded images.
 
 Note that students need to have the appropriate software on their computers in order to open the file.
@@ -85,7 +85,7 @@ A Syllabusmay be used
 * To include a mini website as a course syllabus
 * To provide draft files of software programs so students can edit and submit them for assessment';
 $string['modulename_link'] = 'mod/syllabus/view';
-$string['modulenameplural'] = 'Files';
+$string['modulenameplural'] = 'Syllabus';
 $string['notmigrated'] = 'This legacy syllabus type ({$a}) was not yet migrated, sorry.';
 $string['optionsheader'] = 'Display options';
 $string['page-mod-syllabus-x'] = 'Any Syllabusmodule page';
@@ -108,7 +108,7 @@ $string['syllabusdetails_typedate'] = '{$a->type} {$a->date}';
 $string['syllabusdetails_sizetypedate'] = '{$a->size} {$a->type} {$a->date}';
 $string['syllabus:exportsyllabus'] = 'Export syllabus';
 $string['syllabus:view'] = 'View syllabus';
-$string['search:activity'] = 'File';
+$string['search:activity'] = 'Syllabus';
 $string['selectmainfile'] = 'Please select the main Syllabusby clicking the icon next to Syllabusname.';
 $string['showdate'] = 'Show upload/modified date';
 $string['showdate_desc'] = 'Display upload/modified date on course page?';

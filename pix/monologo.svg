@@ -1,18 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="1080" height="1080" viewBox="0 0 1080 1080" xml:space="preserve">
-<desc>Created with Fabric.js 5.2.4</desc>
-<defs>
-</defs>
-<g transform="matrix(1 0 0 1 540 540)" id="0644476d-5b50-4fa0-92c4-fc629fa4b01f"  >
-<rect style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1; visibility: hidden;" vector-effect="non-scaling-stroke"  x="-540" y="-540" rx="0" ry="0" width="1080" height="1080" />
-</g>
-<g transform="matrix(1 0 0 1 540 540)" id="d8251781-d55f-46ee-8e5e-b3b1f5478ee0"  >
-</g>
-<g transform="matrix(1 0 0 1 540 540)" id="5cfbd713-4499-411b-b77a-fc27aef72eb9"  >
-<path style="stroke: rgb(0,0,0); stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke"  transform=" translate(-37.15, -37.2)" d="M 66.5 15.1 L 52.4 1 C 51.699999999999996 0.30000000000000004 50.8 0 49.8 0 L 10.3 0 C 8.2 0 6.6 1.6 6.6 3.7 L 6.6 3.7 L 6.6 70.7 C 6.6 72.8 8.2 74.4 10.3 74.4 L 10.3 74.4 L 64 74.4 C 66.1 74.4 67.7 72.80000000000001 67.7 70.7 L 67.7 70.7 L 67.7 17.8 C 67.5 16.8 67.2 15.8 66.5 15.1 z M 48.4 6.7 L 60.9 19.2 L 48.4 19.2 L 48.4 6.7 z M 11.9 69.2 L 11.9 5 L 42.8 5 L 42.8 20.6 C 42.8 22.8 44.5 24.400000000000002 46.599999999999994 24.400000000000002 L 62.199999999999996 24.400000000000002 L 62.199999999999996 69.10000000000001 L 11.9 69.2 L 11.9 69.2 z" stroke-linecap="round" />
-</g>
-<g transform="matrix(1 0 0 1 540 602.02)" style="" id="f884cdb1-5d32-46a8-b5e1-8862076fd623"  >
-		<text xml:space="preserve" font-family="Lato" font-size="40" font-style="normal" font-weight="400" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1; white-space: pre;" ><tspan x="-72.2" y="12.57" >Syllabus</tspan></text>
-</g>
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="24px" height="24px" version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 74.4 74.4" style="enable-background:new 0 0 74.4 74.4;" preserveAspectRatio="xMinYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <g>
+    <path d="M66.5,15.1L52.4,1c-0.7-0.7-1.6-1-2.6-1H10.3C8.2,0,6.6,1.6,6.6,3.7l0,0v67c0,2.1,1.6,3.7,3.7,3.7l0,0H64 c2.1,0,3.7-1.6,3.7-3.7l0,0V17.8C67.5,16.8,67.2,15.8,66.5,15.1z M48.4,6.7l12.5,12.5H48.4V6.7z M11.9,69.2V5h30.9v15.6 c0,2.2,1.7,3.8,3.8,3.8h15.6v44.7L11.9,69.2L11.9,69.2z"/>
+  </g>
+  <text style="white-space: pre; fill: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 2.9px;" x="27.236" y="38.877" transform="matrix(15.48102, 0, 0, 15.901283, -399.957947, -557.769409)">S</text>
 </svg>
