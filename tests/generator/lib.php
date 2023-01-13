@@ -17,7 +17,7 @@
 /**
  * Data generator.
  *
- * @package    mod_resource
+ * @package    mod_syllabus
  * @copyright 2013 The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -26,16 +26,16 @@ defined('MOODLE_INTERNAL') || die();
 
 
 /**
- * Resource module data generator class.
+ * Syllabus module data generator class.
  *
- * @package    mod_resource
+ * @package    mod_syllabus
  * @copyright 2013 The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mod_resource_generator extends testing_module_generator {
+class mod_syllabus_generator extends testing_module_generator {
 
     /**
-     * Creates new resource module instance. By default it contains a short
+     * Creates new Syllabus module instance. By default it contains a short
      * text file.
      *
      * @param array|stdClass $record data for module being generated. Requires 'course' key
@@ -48,13 +48,13 @@ class mod_resource_generator extends testing_module_generator {
      */
     public function create_instance($record = null, array $options = null) {
         global $CFG, $USER;
-        require_once($CFG->dirroot . '/lib/resourcelib.php');
+        require_once($CFG->dirroot . '/lib/syllabuslib.php');
         // Ensure the record can be modified without affecting calling code.
         $record = (object)(array)$record;
 
         // Fill in optional values if not specified.
         if (!isset($record->display)) {
-            $record->display = RESOURCELIB_DISPLAY_AUTO;
+            $record->display = syllabusLIB_DISPLAY_AUTO;
         }
         if (!isset($record->printintro)) {
             $record->printintro = 0;
@@ -70,10 +70,10 @@ class mod_resource_generator extends testing_module_generator {
         // specified, create a default file.
         if (!isset($record->files)) {
             if (empty($USER->username) || $USER->username === 'guest') {
-                throw new coding_exception('resource generator requires a current user');
+                throw new coding_exception('syllabus generator requires a current user');
             }
             $usercontext = context_user::instance($USER->id);
-            $filename = $record->defaultfilename ?? 'resource' . ($this->instancecount + 1) . '.txt';
+            $filename = $record->defaultfilename ?? 'syllabus' . ($this->instancecount + 1) . '.txt';
 
             // Pick a random context id for specified user.
             $record->files = file_get_unused_draft_itemid();
@@ -83,7 +83,7 @@ class mod_resource_generator extends testing_module_generator {
                     'contextid' => $usercontext->id, 'itemid' => $record->files,
                     'filename' => $filename, 'filepath' => '/'];
             $fs = get_file_storage();
-            $fs->create_file_from_string($filerecord, 'Test resource ' . $filename . ' file');
+            $fs->create_file_from_string($filerecord, 'Test syllabus ' . $filename . ' file');
         }
 
         // Do work to actually add the instance.

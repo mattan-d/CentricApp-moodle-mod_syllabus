@@ -17,13 +17,13 @@ copyright 2009 Petr Skoda (http://skodak.org)
 license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
 
 
-Resource module
+Syllabus module
 =============
 
-Resource module one of the successors to original 'file' type plugin of Resource module.
+Syllabus module one of the successors to original 'file' type plugin of Syllabus module.
 
 
 TODO:
  * reimplement portfolio support (MDL-20079)
  * new backup/restore and old restore migration (MDL-20081)
- * reimplement resource name filter as part of more general activitynames filter (MDL-20083)
+ * reimplement syllabus name filter as part of more general activitynames filter (MDL-20083)

@@ -16,9 +16,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * List of all resources in course
+ * List of all syllabuss in course
  *
- * @package    mod_resource
+ * @package    mod_syllabus
  * @copyright  1999 onwards Martin Dougiamas (http://dougiamas.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -35,28 +35,28 @@ $PAGE->set_pagelayout('incourse');
 $params = array(
     'context' => context_course::instance($course->id)
 );
-$event = \mod_resource\event\course_module_instance_list_viewed::create($params);
+$event = \mod_syllabus\event\course_module_instance_list_viewed::create($params);
 $event->add_record_snapshot('course', $course);
 $event->trigger();
 
-$strresource     = get_string('modulename', 'resource');
-$strresources    = get_string('modulenameplural', 'resource');
+$strsyllabus     = get_string('modulename', 'syllabus');
+$strsyllabuss    = get_string('modulenameplural', 'syllabus');
 $strsectionname  = get_string('sectionname', 'format_'.$course->format);
 $strname         = get_string('name');
 $strintro        = get_string('moduleintro');
 $strlastmodified = get_string('lastmodified');
 
-$PAGE->set_url('/mod/resource/index.php', array('id' => $course->id));
-$PAGE->set_title($course->shortname.': '.$strresources);
+$PAGE->set_url('/mod/syllabus/index.php', array('id' => $course->id));
+$PAGE->set_title($course->shortname.': '.$strsyllabuss);
 $PAGE->set_heading($course->fullname);
-$PAGE->navbar->add($strresources);
+$PAGE->navbar->add($strsyllabuss);
 echo $OUTPUT->header();
 if (!$PAGE->has_secondary_navigation()) {
-    echo $OUTPUT->heading($strresources);
+    echo $OUTPUT->heading($strsyllabuss);
 }
 
-if (!$resources = get_all_instances_in_course('resource', $course)) {
-    notice(get_string('thereareno', 'moodle', $strresources), "$CFG->wwwroot/course/view.php?id=$course->id");
+if (!$syllabuss = get_all_instances_in_course('syllabus', $course)) {
+    notice(get_string('thereareno', 'moodle', $strsyllabuss), "$CFG->wwwroot/course/view.php?id=$course->id");
     exit;
 }
 
@@ -75,35 +75,35 @@ if ($usesections) {
 
 $modinfo = get_fast_modinfo($course);
 $currentsection = '';
-foreach ($resources as $resource) {
-    $cm = $modinfo->cms[$resource->coursemodule];
+foreach ($syllabuss as $syllabus) {
+    $cm = $modinfo->cms[$syllabus->coursemodule];
     if ($usesections) {
         $printsection = '';
-        if ($resource->section !== $currentsection) {
-            if ($resource->section) {
-                $printsection = get_section_name($course, $resource->section);
+        if ($syllabus->section !== $currentsection) {
+            if ($syllabus->section) {
+                $printsection = get_section_name($course, $syllabus->section);
             }
             if ($currentsection !== '') {
                 $table->data[] = 'hr';
             }
-            $currentsection = $resource->section;
+            $currentsection = $syllabus->section;
         }
     } else {
-        $printsection = '<span class="smallinfo">'.userdate($resource->timemodified)."</span>";
+        $printsection = '<span class="smallinfo">'.userdate($syllabus->timemodified)."</span>";
     }
 
     $extra = empty($cm->extra) ? '' : $cm->extra;
     $icon = '';
     if (!empty($cm->icon)) {
-        // each resource file has an icon in 2.0
+        // each syllabus file has an icon in 2.0
         $icon = $OUTPUT->pix_icon($cm->icon, get_string('modulename', $cm->modname));
     }
 
-    $class = $resource->visible ? '' : 'class="dimmed"'; // hidden modules are dimmed
+    $class = $syllabus->visible ? '' : 'class="dimmed"'; // hidden modules are dimmed
     $table->data[] = array (
         $printsection,
-        "<a $class $extra href=\"view.php?id=$cm->id\">".$icon.format_string($resource->name)."</a>",
-        format_module_intro('resource', $resource, $cm->id));
+        "<a $class $extra href=\"view.php?id=$cm->id\">".$icon.format_string($syllabus->name)."</a>",
+        format_module_intro('syllabus', $syllabus, $cm->id));
 }
 
 echo html_writer::table($table);

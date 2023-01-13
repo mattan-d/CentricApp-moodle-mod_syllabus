@@ -16,19 +16,19 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Define all the backup steps that will be used by the backup_resource_activity_task
+ * Define all the backup steps that will be used by the backup_syllabus_activity_task
  *
- * @package    mod_resource
- * @copyright  2010 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
+ * @package    mod_syllabus
+ * @copyright  2023 CentricApp  {@link https://centricapp.co}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die;
 
 /**
- * Define the complete resource structure for backup, with file and id annotations
+ * Define the complete syllabus structure for backup, with file and id annotations
  */
-class backup_resource_activity_structure_step extends backup_activity_structure_step {
+class backup_syllabus_activity_structure_step extends backup_activity_structure_step {
 
     protected function define_structure() {
 
@@ -36,7 +36,7 @@ class backup_resource_activity_structure_step extends backup_activity_structure_
         $userinfo = $this->get_setting_value('userinfo');
 
         // Define each element separated
-        $resource = new backup_nested_element('resource', array('id'), array(
+        $syllabus = new backup_nested_element('syllabus', array('id'), array(
             'name', 'intro', 'introformat', 'tobemigrated',
             'legacyfiles', 'legacyfileslast', 'display',
             'displayoptions', 'filterfiles', 'revision', 'timemodified'));
@@ -45,16 +45,16 @@ class backup_resource_activity_structure_step extends backup_activity_structure_
         // (love this)
 
         // Define sources
-        $resource->set_source_table('resource', array('id' => backup::VAR_ACTIVITYID));
+        $syllabus->set_source_table('syllabus', array('id' => backup::VAR_ACTIVITYID));
 
         // Define id annotations
         // (none)
 
         // Define file annotations
-        $resource->annotate_files('mod_resource', 'intro', null); // This file areas haven't itemid
-        $resource->annotate_files('mod_resource', 'content', null); // This file areas haven't itemid
+        $syllabus->annotate_files('mod_syllabus', 'intro', null); // This file areas haven't itemid
+        $syllabus->annotate_files('mod_syllabus', 'content', null); // This file areas haven't itemid
 
-        // Return the root element (resource), wrapped into standard activity structure
-        return $this->prepare_activity_structure($resource);
+        // Return the root element (syllabus), wrapped into standard activity structure
+        return $this->prepare_activity_structure($syllabus);
     }
 }

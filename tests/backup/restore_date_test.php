@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace mod_resource\backup;
+namespace mod_syllabus\backup;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -24,7 +24,7 @@ require_once($CFG->libdir . "/phpunit/classes/restore_date_testcase.php");
 /**
  * Restore date tests.
  *
- * @package    mod_resource
+ * @package    mod_syllabus
  * @copyright  2017 onwards Ankit Agarwal <ankit.agrr@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -35,11 +35,11 @@ class restore_date_test extends \restore_date_testcase {
 
         $time = 10000;
 
-        list($course, $resource) = $this->create_course_and_module('resource');
+        list($course, $syllabus) = $this->create_course_and_module('syllabus');
 
         // Do backup and restore.
         $newcourseid = $this->backup_and_restore($course);
-        $newresource = $DB->get_record('resource', ['course' => $newcourseid]);
-        $this->assertFieldsNotRolledForward($resource, $newresource, ['timemodified']);
+        $newsyllabus = $DB->get_record('syllabus', ['course' => $newcourseid]);
+        $this->assertFieldsNotRolledForward($syllabus, $newsyllabus, ['timemodified']);
     }
 }

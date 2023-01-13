@@ -1,13 +1,13 @@
-.path-mod-resource .resourcecontent {
+.path-mod-syllabus .syllabuscontent {
     text-align: center;
 }
 
-.path-mod-resource .resourcedetails {
+.path-mod-syllabus .syllabusdetails {
     font-size: 0.8em;
     color: #555;
 }
 
-.resourcelinkdetails {
+.syllabuslinkdetails {
     font-size: 0.8em;
     color: #555;
 }

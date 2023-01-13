@@ -1,5 +1,5 @@
-@mod @mod_resource @_file_upload
-Feature: Teacher can specify different display options for the resource
+@mod @mod_syllabus @_file_upload
+Feature: Teacher can specify different display options for the syllabus
   In order to provide more information about a file
   As a teacher
   I need to be able to show size, type and modified date
@@ -20,22 +20,22 @@ Feature: Teacher can specify different display options for the resource
     And I am on "Course 1" course homepage with editing mode on
 
   @javascript
-  Scenario: Specifying no additional display options for a file resource
+  Scenario: Specifying no additional display options for a file syllabus
     When I add a "File" to section "1"
     And I set the following fields to these values:
       | Name                      | Myfile     |
       | Show size                 | 0          |
       | Show type                 | 0          |
       | Show upload/modified date | 0          |
-    And I upload "mod/resource/tests/fixtures/samplefile.txt" file to "Select files" filemanager
+    And I upload "mod/syllabus/tests/fixtures/samplefile.txt" file to "Select files" filemanager
     And I press "Save and display"
-    Then ".resourcedetails" "css_element" should not exist
+    Then ".syllabusdetails" "css_element" should not exist
     And I am on "Course 1" course homepage
-    And ".activity.resource .resourcelinkdetails" "css_element" should not exist
+    And ".activity.syllabus .syllabuslinkdetails" "css_element" should not exist
     And I log out
 
   @javascript
-  Scenario Outline: Specifying different display options for a file resource
+  Scenario Outline: Specifying different display options for a file syllabus
     When I add a "File" to section "1"
     And I set the following fields to these values:
       | Name                      | Myfile     |
@@ -43,15 +43,15 @@ Feature: Teacher can specify different display options for the resource
       | Show size                 | <showsize> |
       | Show type                 | <showtype> |
       | Show upload/modified date | <showdate> |
-    And I upload "mod/resource/tests/fixtures/samplefile.txt" file to "Select files" filemanager
+    And I upload "mod/syllabus/tests/fixtures/samplefile.txt" file to "Select files" filemanager
     And I press "Save and display"
-    Then I <seesize> see "6 bytes" in the ".resourcedetails" "css_element"
-    And I <seetype> see "Text file" in the ".resourcedetails" "css_element"
-    And I <seedate> see "Uploaded" in the ".resourcedetails" "css_element"
+    Then I <seesize> see "6 bytes" in the ".syllabusdetails" "css_element"
+    And I <seetype> see "Text file" in the ".syllabusdetails" "css_element"
+    And I <seedate> see "Uploaded" in the ".syllabusdetails" "css_element"
     And I am on "Course 1" course homepage
-    And I <seesize> see "6 bytes" in the ".activity.resource .resourcelinkdetails" "css_element"
-    And I <seetype> see "Text file" in the ".activity.resource .resourcelinkdetails" "css_element"
-    And I <seedate> see "Uploaded" in the ".activity.resource .resourcelinkdetails" "css_element"
+    And I <seesize> see "6 bytes" in the ".activity.syllabus .syllabuslinkdetails" "css_element"
+    And I <seetype> see "Text file" in the ".activity.syllabus .syllabuslinkdetails" "css_element"
+    And I <seedate> see "Uploaded" in the ".activity.syllabus .syllabuslinkdetails" "css_element"
     And I log out
 
     Examples:

@@ -16,27 +16,27 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Defines backup_resource_activity_task class
+ * Defines backup_syllabus_activity_task class
  *
- * @package     mod_resource
+ * @package     mod_syllabus
  * @category    backup
- * @copyright   2010 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
+ * @copyright   2023 CentricApp  {@link https://centricapp.co}
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die;
 
-require_once($CFG->dirroot . '/mod/resource/backup/moodle2/backup_resource_stepslib.php');
+require_once($CFG->dirroot . '/mod/syllabus/backup/moodle2/backup_syllabus_stepslib.php');
 
 /**
- * Provides the steps to perform one complete backup of the Resource instance
+ * Provides the steps to perform one complete backup of the syllabus instance
  */
-class backup_resource_activity_task extends backup_activity_task {
+class backup_syllabus_activity_task extends backup_activity_task {
 
     /**
-     * @param bool $resourceoldexists True if there are records in the resource_old table.
+     * @param bool $syllabusoldexists True if there are records in the syllabus_old table.
      */
-    protected static $resourceoldexists = null;
+    protected static $syllabusoldexists = null;
 
     /**
      * No specific settings for this activity
@@ -45,10 +45,10 @@ class backup_resource_activity_task extends backup_activity_task {
     }
 
     /**
-     * Defines a backup step to store the instance data in the resource.xml file
+     * Defines a backup step to store the instance data in the syllabus.xml file
      */
     protected function define_my_steps() {
-        $this->add_step(new backup_resource_activity_structure_step('resource_structure', 'resource.xml'));
+        $this->add_step(new backup_syllabus_activity_structure_step('syllabus_structure', 'syllabus.xml'));
     }
 
     /**
@@ -62,39 +62,39 @@ class backup_resource_activity_task extends backup_activity_task {
 
         $base = preg_quote($CFG->wwwroot,"/");
 
-        // Link to the list of resources.
-        $search="/(".$base."\/mod\/resource\/index.php\?id\=)([0-9]+)/";
-        $content= preg_replace($search, '$@RESOURCEINDEX*$2@$', $content);
+        // Link to the list of syllabuss.
+        $search="/(".$base."\/mod\/syllabus\/index.php\?id\=)([0-9]+)/";
+        $content= preg_replace($search, '$@syllabusINDEX*$2@$', $content);
 
-        // Link to resource view by moduleid.
-        $search = "/(".$base."\/mod\/resource\/view.php\?id\=)([0-9]+)/";
-        // Link to resource view by recordid
-        $search2 = "/(".$base."\/mod\/resource\/view.php\?r\=)([0-9]+)/";
+        // Link to syllabus view by moduleid.
+        $search = "/(".$base."\/mod\/syllabus\/view.php\?id\=)([0-9]+)/";
+        // Link to syllabus view by recordid
+        $search2 = "/(".$base."\/mod\/syllabus\/view.php\?r\=)([0-9]+)/";
 
-        // Check whether there are contents in the resource old table.
-        if (static::$resourceoldexists === null) {
-            static::$resourceoldexists = $DB->record_exists('resource_old', array());
+        // Check whether there are contents in the syllabus old table.
+        if (static::$syllabusoldexists === null) {
+            static::$syllabusoldexists = $DB->record_exists('syllabus_old', array());
         }
 
-        // If there are links to items in the resource_old table, rewrite them to be links to the correct URL
+        // If there are links to items in the syllabus_old table, rewrite them to be links to the correct URL
         // for their new module.
-        if (static::$resourceoldexists) {
-            // Match all of the resources.
+        if (static::$syllabusoldexists) {
+            // Match all of the syllabuss.
             $result = preg_match_all($search, $content, $matches, PREG_PATTERN_ORDER);
 
-            // Course module ID resource links.
+            // Course module ID syllabus links.
             if ($result) {
                 list($insql, $params) = $DB->get_in_or_equal($matches[2]);
-                $oldrecs = $DB->get_records_select('resource_old', "cmid $insql", $params, '', 'cmid, newmodule');
+                $oldrecs = $DB->get_records_select('syllabus_old', "cmid $insql", $params, '', 'cmid, newmodule');
 
                 for ($i = 0; $i < count($matches[0]); $i++) {
                     $cmid = $matches[2][$i];
                     if (isset($oldrecs[$cmid])) {
-                        // Resource_old item, rewrite it
+                        // syllabus_old item, rewrite it
                         $replace = '$@' . strtoupper($oldrecs[$cmid]->newmodule) . 'VIEWBYID*' . $cmid . '@$';
                     } else {
-                        // Not in the resource old table, don't rewrite
-                        $replace = '$@RESOURCEVIEWBYID*'.$cmid.'@$';
+                        // Not in the syllabus old table, don't rewrite
+                        $replace = '$@syllabusVIEWBYID*'.$cmid.'@$';
                     }
                     $content = str_replace($matches[0][$i], $replace, $content);
                 }
@@ -103,24 +103,24 @@ class backup_resource_activity_task extends backup_activity_task {
             $matches = null;
             $result = preg_match_all($search2, $content, $matches, PREG_PATTERN_ORDER);
 
-            // No resource links.
+            // No syllabus links.
             if (!$result) {
                 return $content;
             }
-            // Resource ID links.
+            // syllabus ID links.
             list($insql, $params) = $DB->get_in_or_equal($matches[2]);
-            $oldrecs = $DB->get_records_select('resource_old', "oldid $insql", $params, '', 'oldid, cmid, newmodule');
+            $oldrecs = $DB->get_records_select('syllabus_old', "oldid $insql", $params, '', 'oldid, cmid, newmodule');
 
             for ($i = 0; $i < count($matches[0]); $i++) {
                 $recordid = $matches[2][$i];
                 if (isset($oldrecs[$recordid])) {
-                    // Resource_old item, rewrite it
+                    // syllabus_old item, rewrite it
                     $replace = '$@' . strtoupper($oldrecs[$recordid]->newmodule) . 'VIEWBYID*' . $oldrecs[$recordid]->cmid . '@$';
                     $content = str_replace($matches[0][$i], $replace, $content);
                 }
             }
         } else {
-            $content = preg_replace($search, '$@RESOURCEVIEWBYID*$2@$', $content);
+            $content = preg_replace($search, '$@syllabusVIEWBYID*$2@$', $content);
         }
         return $content;
     }

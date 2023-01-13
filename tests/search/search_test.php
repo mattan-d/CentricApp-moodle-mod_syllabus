@@ -15,15 +15,15 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Resource search unit tests.
+ * syllabus search unit tests.
  *
- * @package     mod_resource
+ * @package     mod_syllabus
  * @category    test
  * @copyright   2016 Eric Merrill {@link http://www.merrilldigital.com}
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_resource\search;
+namespace mod_syllabus\search;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -33,7 +33,7 @@ require_once($CFG->dirroot . '/search/tests/fixtures/testable_core_search.php');
 /**
  * Provides the unit tests for forum search.
  *
- * @package     mod_resource
+ * @package     mod_syllabus
  * @category    test
  * @copyright   2016 Eric Merrill {@link http://www.merrilldigital.com}
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -43,20 +43,20 @@ class search_test extends \advanced_testcase {
     /**
      * @var string Area id
      */
-    protected $resourceareaid = null;
+    protected $syllabusareaid = null;
 
     public function setUp(): void {
         $this->resetAfterTest(true);
         set_config('enableglobalsearch', true);
 
-        $this->resourceareaid = \core_search\manager::generate_areaid('mod_resource', 'activity');
+        $this->syllabusareaid = \core_search\manager::generate_areaid('mod_syllabus', 'activity');
 
         // Set \core_search::instance to the mock_search_engine as we don't require the search engine to be working to test this.
         $search = \testable_core_search::instance();
     }
 
     /**
-     * Test for resource file attachments.
+     * Test for syllabus file attachments.
      *
      * @return void
      */
@@ -84,17 +84,17 @@ class search_test extends \advanced_testcase {
             'filename'  => 'mainfile',
             'sortorder' => 1
         );
-        $fs->create_file_from_string($filerecord, 'Test resource file');
+        $fs->create_file_from_string($filerecord, 'Test syllabus file');
 
         // Attach a second file.
         $filerecord['filename'] = 'extrafile';
         $filerecord['sortorder'] = 0;
-        $fs->create_file_from_string($filerecord, 'Test resource file 2');
+        $fs->create_file_from_string($filerecord, 'Test syllabus file 2');
 
-        $resource = $this->getDataGenerator()->create_module('resource', $record);
+        $syllabus = $this->getDataGenerator()->create_module('syllabus', $record);
 
-        $searcharea = \core_search\manager::get_search_area($this->resourceareaid);
-        $this->assertInstanceOf('\mod_resource\search\activity', $searcharea);
+        $searcharea = \core_search\manager::get_search_area($this->syllabusareaid);
+        $this->assertInstanceOf('\mod_syllabus\search\activity', $searcharea);
 
         $recordset = $searcharea->get_recordset_by_timestamp(0);
         $nrecords = 0;
@@ -103,7 +103,7 @@ class search_test extends \advanced_testcase {
             $searcharea->attach_files($doc);
             $files = $doc->get_files();
 
-            // Resources should return all added files.
+            // syllabuss should return all added files.
             $this->assertCount(2, $files);
 
             $filenames = array();

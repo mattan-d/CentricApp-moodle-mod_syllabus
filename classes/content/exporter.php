@@ -17,11 +17,11 @@
 /**
  * Content export definition.
  *
- * @package     mod_resource
+ * @package     mod_syllabus
  * @copyright   2020 Simey Lameze <simey@moodle.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-namespace mod_resource\content;
+namespace mod_syllabus\content;
 
 use core\content\export\exportable_items\exportable_filearea;
 use core\content\export\exporters\abstract_mod_exporter;
@@ -35,7 +35,7 @@ use core\content\export\exporters\abstract_mod_exporter;
 class exporter extends abstract_mod_exporter {
 
     /**
-     * Get the exportable items for mod_resource.
+     * Get the exportable items for mod_syllabus.
      *
      * @param   bool $includeuserdata Whether to include user data, in addition to shared content.
      * @return  \core\content\export\exportable_item[]
@@ -46,9 +46,9 @@ class exporter extends abstract_mod_exporter {
         $contentitems[]  = new exportable_filearea(
             $this->get_context(),
             $this->get_component(),
-            get_string('resourcecontent', 'mod_resource'),
+            get_string('syllabuscontent', 'mod_syllabus'),
 
-            // The files held in mod_resource are stored in the 'content' filearea, under itemid 0.
+            // The files held in mod_syllabus are stored in the 'content' filearea, under itemid 0.
             'content',
             0,
 

@@ -16,67 +16,67 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Resource module version information
+ * Syllabus module version information
  *
- * @package    mod_resource
- * @copyright  2009 Petr Skoda  {@link http://skodak.org}
+ * @package    mod_syllabus
+ * @copyright  2023 CentricApp  {@link https://centricapp.co}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 require('../../config.php');
-require_once($CFG->dirroot.'/mod/resource/lib.php');
-require_once($CFG->dirroot.'/mod/resource/locallib.php');
+require_once($CFG->dirroot.'/mod/syllabus/lib.php');
+require_once($CFG->dirroot.'/mod/syllabus/locallib.php');
 require_once($CFG->libdir.'/completionlib.php');
 
 $id       = optional_param('id', 0, PARAM_INT); // Course Module ID
-$r        = optional_param('r', 0, PARAM_INT);  // Resource instance ID
+$r        = optional_param('r', 0, PARAM_INT);  // syllabus instance ID
 $redirect = optional_param('redirect', 0, PARAM_BOOL);
 $forceview = optional_param('forceview', 0, PARAM_BOOL);
 
 if ($r) {
-    if (!$resource = $DB->get_record('resource', array('id'=>$r))) {
-        resource_redirect_if_migrated($r, 0);
+    if (!$syllabus = $DB->get_record('syllabus', array('id'=>$r))) {
+        syllabus_redirect_if_migrated($r, 0);
         throw new \moodle_exception('invalidaccessparameter');
     }
-    $cm = get_coursemodule_from_instance('resource', $resource->id, $resource->course, false, MUST_EXIST);
+    $cm = get_coursemodule_from_instance('syllabus', $syllabus->id, $syllabus->course, false, MUST_EXIST);
 
 } else {
-    if (!$cm = get_coursemodule_from_id('resource', $id)) {
-        resource_redirect_if_migrated(0, $id);
+    if (!$cm = get_coursemodule_from_id('syllabus', $id)) {
+        syllabus_redirect_if_migrated(0, $id);
         throw new \moodle_exception('invalidcoursemodule');
     }
-    $resource = $DB->get_record('resource', array('id'=>$cm->instance), '*', MUST_EXIST);
+    $syllabus = $DB->get_record('syllabus', array('id'=>$cm->instance), '*', MUST_EXIST);
 }
 
 $course = $DB->get_record('course', array('id'=>$cm->course), '*', MUST_EXIST);
 
 require_course_login($course, true, $cm);
 $context = context_module::instance($cm->id);
-require_capability('mod/resource:view', $context);
+require_capability('mod/syllabus:view', $context);
 
 // Completion and trigger events.
-resource_view($resource, $course, $cm, $context);
+syllabus_view($syllabus, $course, $cm, $context);
 
-$PAGE->set_url('/mod/resource/view.php', array('id' => $cm->id));
+$PAGE->set_url('/mod/syllabus/view.php', array('id' => $cm->id));
 
-if ($resource->tobemigrated) {
-    resource_print_tobemigrated($resource, $cm, $course);
+if ($syllabus->tobemigrated) {
+    syllabus_print_tobemigrated($syllabus, $cm, $course);
     die;
 }
 
 $fs = get_file_storage();
-$files = $fs->get_area_files($context->id, 'mod_resource', 'content', 0, 'sortorder DESC, id ASC', false); // TODO: this is not very efficient!!
+$files = $fs->get_area_files($context->id, 'mod_syllabus', 'content', 0, 'sortorder DESC, id ASC', false); // TODO: this is not very efficient!!
 if (count($files) < 1) {
-    resource_print_filenotfound($resource, $cm, $course);
+    syllabus_print_filenotfound($syllabus, $cm, $course);
     die;
 } else {
     $file = reset($files);
     unset($files);
 }
 
-$resource->mainfile = $file->get_filename();
-$displaytype = resource_get_final_display_type($resource);
-if ($displaytype == RESOURCELIB_DISPLAY_OPEN || $displaytype == RESOURCELIB_DISPLAY_DOWNLOAD) {
+$syllabus->mainfile = $file->get_filename();
+$displaytype = syllabus_get_final_display_type($syllabus);
+if ($displaytype == syllabusLIB_DISPLAY_OPEN || $displaytype == syllabusLIB_DISPLAY_DOWNLOAD) {
     $redirect = true;
 }
 
@@ -90,19 +90,19 @@ if ($redirect && !course_get_format($course)->has_view_page() &&
 if ($redirect && !$forceview) {
     // coming from course page or url index page
     // this redirect trick solves caching problems when tracking views ;-)
-    $path = '/'.$context->id.'/mod_resource/content/'.$resource->revision.$file->get_filepath().$file->get_filename();
-    $fullurl = moodle_url::make_file_url('/pluginfile.php', $path, $displaytype == RESOURCELIB_DISPLAY_DOWNLOAD);
+    $path = '/'.$context->id.'/mod_syllabus/content/'.$syllabus->revision.$file->get_filepath().$file->get_filename();
+    $fullurl = moodle_url::make_file_url('/pluginfile.php', $path, $displaytype == syllabusLIB_DISPLAY_DOWNLOAD);
     redirect($fullurl);
 }
 
 switch ($displaytype) {
-    case RESOURCELIB_DISPLAY_EMBED:
-        resource_display_embed($resource, $cm, $course, $file);
+    case syllabusLIB_DISPLAY_EMBED:
+        syllabus_display_embed($syllabus, $cm, $course, $file);
         break;
-    case RESOURCELIB_DISPLAY_FRAME:
-        resource_display_frame($resource, $cm, $course, $file);
+    case syllabusLIB_DISPLAY_FRAME:
+        syllabus_display_frame($syllabus, $cm, $course, $file);
         break;
     default:
-        resource_print_workaround($resource, $cm, $course, $file);
+        syllabus_print_workaround($syllabus, $cm, $course, $file);
         break;
 }

@@ -16,21 +16,21 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    mod_resource
- * @copyright  2009 Petr Skoda  {@link http://skodak.org}
+ * @package    mod_syllabus
+ * @copyright  2023 CentricApp  {@link https://centricapp.co}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die;
 
 /**
- * List of features supported in Resource module
+ * List of features supported in Syllabus module
  * @param string $feature FEATURE_xx constant for requested feature
  * @return mixed True if module supports feature, false if not, null if doesn't know or string for the module purpose.
  */
-function resource_supports($feature) {
+function syllabus_supports($feature) {
     switch($feature) {
-        case FEATURE_MOD_ARCHETYPE:           return MOD_ARCHETYPE_RESOURCE;
+        case FEATURE_MOD_ARCHETYPE:           return MOD_ARCHETYPE_syllabus;
         case FEATURE_GROUPS:                  return false;
         case FEATURE_GROUPINGS:               return false;
         case FEATURE_MOD_INTRO:               return true;
@@ -50,7 +50,7 @@ function resource_supports($feature) {
  * @param $data the data submitted from the reset course.
  * @return array status array
  */
-function resource_reset_userdata($data) {
+function syllabus_reset_userdata($data) {
 
     // Any changes to the list of dates that needs to be rolled should be same during course restore and course reset.
     // See MDL-9367.
@@ -68,7 +68,7 @@ function resource_reset_userdata($data) {
  *
  * @return array
  */
-function resource_get_view_actions() {
+function syllabus_get_view_actions() {
     return array('view','view all');
 }
 
@@ -82,57 +82,57 @@ function resource_get_view_actions() {
  *
  * @return array
  */
-function resource_get_post_actions() {
+function syllabus_get_post_actions() {
     return array('update', 'add');
 }
 
 /**
- * Add resource instance.
+ * Add syllabus instance.
  * @param object $data
  * @param object $mform
- * @return int new resource instance id
+ * @return int new syllabus instance id
  */
-function resource_add_instance($data, $mform) {
+function syllabus_add_instance($data, $mform) {
     global $CFG, $DB;
-    require_once("$CFG->libdir/resourcelib.php");
-    require_once("$CFG->dirroot/mod/resource/locallib.php");
+    require_once("$CFG->libdir/syllabuslib.php");
+    require_once("$CFG->dirroot/mod/syllabus/locallib.php");
     $cmid = $data->coursemodule;
     $data->timemodified = time();
 
-    resource_set_display_options($data);
+    syllabus_set_display_options($data);
 
-    $data->id = $DB->insert_record('resource', $data);
+    $data->id = $DB->insert_record('syllabus', $data);
 
     // we need to use context now, so we need to make sure all needed info is already in db
     $DB->set_field('course_modules', 'instance', $data->id, array('id'=>$cmid));
-    resource_set_mainfile($data);
+    syllabus_set_mainfile($data);
 
     $completiontimeexpected = !empty($data->completionexpected) ? $data->completionexpected : null;
-    \core_completion\api::update_completion_date_event($cmid, 'resource', $data->id, $completiontimeexpected);
+    \core_completion\api::update_completion_date_event($cmid, 'syllabus', $data->id, $completiontimeexpected);
 
     return $data->id;
 }
 
 /**
- * Update resource instance.
+ * Update syllabus instance.
  * @param object $data
  * @param object $mform
  * @return bool true
  */
-function resource_update_instance($data, $mform) {
+function syllabus_update_instance($data, $mform) {
     global $CFG, $DB;
-    require_once("$CFG->libdir/resourcelib.php");
+    require_once("$CFG->libdir/syllabuslib.php");
     $data->timemodified = time();
     $data->id           = $data->instance;
     $data->revision++;
 
-    resource_set_display_options($data);
+    syllabus_set_display_options($data);
 
-    $DB->update_record('resource', $data);
-    resource_set_mainfile($data);
+    $DB->update_record('syllabus', $data);
+    syllabus_set_mainfile($data);
 
     $completiontimeexpected = !empty($data->completionexpected) ? $data->completionexpected : null;
-    \core_completion\api::update_completion_date_event($data->coursemodule, 'resource', $data->id, $completiontimeexpected);
+    \core_completion\api::update_completion_date_event($data->coursemodule, 'syllabus', $data->id, $completiontimeexpected);
 
     return true;
 }
@@ -140,17 +140,17 @@ function resource_update_instance($data, $mform) {
 /**
  * Updates display options based on form input.
  *
- * Shared code used by resource_add_instance and resource_update_instance.
+ * Shared code used by syllabus_add_instance and syllabus_update_instance.
  *
  * @param object $data Data object
  */
-function resource_set_display_options($data) {
+function syllabus_set_display_options($data) {
     $displayoptions = array();
-    if ($data->display == RESOURCELIB_DISPLAY_POPUP) {
+    if ($data->display == syllabusLIB_DISPLAY_POPUP) {
         $displayoptions['popupwidth']  = $data->popupwidth;
         $displayoptions['popupheight'] = $data->popupheight;
     }
-    if (in_array($data->display, array(RESOURCELIB_DISPLAY_AUTO, RESOURCELIB_DISPLAY_EMBED, RESOURCELIB_DISPLAY_FRAME))) {
+    if (in_array($data->display, array(syllabusLIB_DISPLAY_AUTO, syllabusLIB_DISPLAY_EMBED, syllabusLIB_DISPLAY_FRAME))) {
         $displayoptions['printintro']   = (int)!empty($data->printintro);
     }
     if (!empty($data->showsize)) {
@@ -166,23 +166,23 @@ function resource_set_display_options($data) {
 }
 
 /**
- * Delete resource instance.
+ * Delete syllabus instance.
  * @param int $id
  * @return bool true
  */
-function resource_delete_instance($id) {
+function syllabus_delete_instance($id) {
     global $DB;
 
-    if (!$resource = $DB->get_record('resource', array('id'=>$id))) {
+    if (!$syllabus = $DB->get_record('syllabus', array('id'=>$id))) {
         return false;
     }
 
-    $cm = get_coursemodule_from_instance('resource', $id);
-    \core_completion\api::update_completion_date_event($cm->id, 'resource', $id, null);
+    $cm = get_coursemodule_from_instance('syllabus', $id);
+    \core_completion\api::update_completion_date_event($cm->id, 'syllabus', $id, null);
 
     // note: all context files are deleted automatically
 
-    $DB->delete_records('resource', array('id'=>$resource->id));
+    $DB->delete_records('syllabus', array('id'=>$syllabus->id));
 
     return true;
 }
@@ -197,63 +197,63 @@ function resource_delete_instance($id) {
  * @param stdClass $coursemodule
  * @return cached_cm_info info
  */
-function resource_get_coursemodule_info($coursemodule) {
+function syllabus_get_coursemodule_info($coursemodule) {
     global $CFG, $DB;
     require_once("$CFG->libdir/filelib.php");
-    require_once("$CFG->dirroot/mod/resource/locallib.php");
+    require_once("$CFG->dirroot/mod/syllabus/locallib.php");
     require_once($CFG->libdir.'/completionlib.php');
 
     $context = context_module::instance($coursemodule->id);
 
-    if (!$resource = $DB->get_record('resource', array('id'=>$coursemodule->instance),
+    if (!$syllabus = $DB->get_record('syllabus', array('id'=>$coursemodule->instance),
             'id, name, display, displayoptions, tobemigrated, revision, intro, introformat')) {
         return NULL;
     }
 
     $info = new cached_cm_info();
-    $info->name = $resource->name;
+    $info->name = $syllabus->name;
     if ($coursemodule->showdescription) {
         // Convert intro to html. Do not filter cached version, filters run at display time.
-        $info->content = format_module_intro('resource', $resource, $coursemodule->id, false);
+        $info->content = format_module_intro('syllabus', $syllabus, $coursemodule->id, false);
     }
 
-    if ($resource->tobemigrated) {
+    if ($syllabus->tobemigrated) {
         return $info;
     }
 
     // See if there is at least one file.
     $fs = get_file_storage();
-    $files = $fs->get_area_files($context->id, 'mod_resource', 'content', 0, 'sortorder DESC, id ASC', false, 0, 0, 1);
+    $files = $fs->get_area_files($context->id, 'mod_syllabus', 'content', 0, 'sortorder DESC, id ASC', false, 0, 0, 1);
     if (count($files) >= 1) {
         $mainfile = reset($files);
-        $resource->mainfile = $mainfile->get_filename();
+        $syllabus->mainfile = $mainfile->get_filename();
     }
 
-    $display = resource_get_final_display_type($resource);
+    $display = syllabus_get_final_display_type($syllabus);
 
-    if ($display == RESOURCELIB_DISPLAY_POPUP) {
-        $fullurl = "$CFG->wwwroot/mod/resource/view.php?id=$coursemodule->id&amp;redirect=1";
-        $options = empty($resource->displayoptions) ? [] : (array) unserialize_array($resource->displayoptions);
+    if ($display == syllabusLIB_DISPLAY_POPUP) {
+        $fullurl = "$CFG->wwwroot/mod/syllabus/view.php?id=$coursemodule->id&amp;redirect=1";
+        $options = empty($syllabus->displayoptions) ? [] : (array) unserialize_array($syllabus->displayoptions);
         $width  = empty($options['popupwidth'])  ? 620 : $options['popupwidth'];
         $height = empty($options['popupheight']) ? 450 : $options['popupheight'];
         $wh = "width=$width,height=$height,toolbar=no,location=no,menubar=no,copyhistory=no,status=no,directories=no,scrollbars=yes,resizable=yes";
         $info->onclick = "window.open('$fullurl', '', '$wh'); return false;";
 
-    } else if ($display == RESOURCELIB_DISPLAY_NEW) {
-        $fullurl = "$CFG->wwwroot/mod/resource/view.php?id=$coursemodule->id&amp;redirect=1";
+    } else if ($display == syllabusLIB_DISPLAY_NEW) {
+        $fullurl = "$CFG->wwwroot/mod/syllabus/view.php?id=$coursemodule->id&amp;redirect=1";
         $info->onclick = "window.open('$fullurl'); return false;";
 
     }
 
     // If any optional extra details are turned on, store in custom data,
-    // add some file details as well to be used later by resource_get_optional_details() without retriving.
+    // add some file details as well to be used later by syllabus_get_optional_details() without retriving.
     // Do not store filedetails if this is a reference - they will still need to be retrieved every time.
-    if (($filedetails = resource_get_file_details($resource, $coursemodule)) && empty($filedetails['isref'])) {
-        $displayoptions = (array) unserialize_array($resource->displayoptions);
+    if (($filedetails = syllabus_get_file_details($syllabus, $coursemodule)) && empty($filedetails['isref'])) {
+        $displayoptions = (array) unserialize_array($syllabus->displayoptions);
         $displayoptions['filedetails'] = $filedetails;
         $info->customdata['displayoptions'] = serialize($displayoptions);
     } else {
-        $info->customdata['displayoptions'] = $resource->displayoptions;
+        $info->customdata['displayoptions'] = $syllabus->displayoptions;
     }
     $info->customdata['display'] = $display;
 
@@ -266,38 +266,38 @@ function resource_get_coursemodule_info($coursemodule) {
  *
  * @param cm_info $cm Course module information
  */
-function resource_cm_info_view(cm_info $cm) {
+function syllabus_cm_info_view(cm_info $cm) {
     global $CFG;
-    require_once($CFG->dirroot . '/mod/resource/locallib.php');
+    require_once($CFG->dirroot . '/mod/syllabus/locallib.php');
 
-    $resource = (object) ['displayoptions' => $cm->customdata['displayoptions']];
-    $details = resource_get_optional_details($resource, $cm);
+    $syllabus = (object) ['displayoptions' => $cm->customdata['displayoptions']];
+    $details = syllabus_get_optional_details($syllabus, $cm);
     if ($details) {
         $cm->set_after_link(' ' . html_writer::tag('span', $details,
-                array('class' => 'resourcelinkdetails')));
+                array('class' => 'syllabuslinkdetails')));
     }
 }
 
 /**
  * Lists all browsable file areas
  *
- * @package  mod_resource
+ * @package  mod_syllabus
  * @category files
  * @param stdClass $course course object
  * @param stdClass $cm course module object
  * @param stdClass $context context object
  * @return array
  */
-function resource_get_file_areas($course, $cm, $context) {
+function syllabus_get_file_areas($course, $cm, $context) {
     $areas = array();
-    $areas['content'] = get_string('resourcecontent', 'resource');
+    $areas['content'] = get_string('syllabuscontent', 'syllabus');
     return $areas;
 }
 
 /**
- * File browsing support for resource module content area.
+ * File browsing support for Syllabus module content area.
  *
- * @package  mod_resource
+ * @package  mod_syllabus
  * @category files
  * @param stdClass $browser file browser instance
  * @param stdClass $areas file areas
@@ -310,7 +310,7 @@ function resource_get_file_areas($course, $cm, $context) {
  * @param string $filename file name
  * @return file_info instance or null if not found
  */
-function resource_get_file_info($browser, $areas, $course, $cm, $context, $filearea, $itemid, $filepath, $filename) {
+function syllabus_get_file_info($browser, $areas, $course, $cm, $context, $filearea, $itemid, $filepath, $filename) {
     global $CFG;
 
     if (!has_capability('moodle/course:managefiles', $context)) {
@@ -325,27 +325,27 @@ function resource_get_file_info($browser, $areas, $course, $cm, $context, $filea
         $filename = is_null($filename) ? '.' : $filename;
 
         $urlbase = $CFG->wwwroot.'/pluginfile.php';
-        if (!$storedfile = $fs->get_file($context->id, 'mod_resource', 'content', 0, $filepath, $filename)) {
+        if (!$storedfile = $fs->get_file($context->id, 'mod_syllabus', 'content', 0, $filepath, $filename)) {
             if ($filepath === '/' and $filename === '.') {
-                $storedfile = new virtual_root_file($context->id, 'mod_resource', 'content', 0);
+                $storedfile = new virtual_root_file($context->id, 'mod_syllabus', 'content', 0);
             } else {
                 // not found
                 return null;
             }
         }
-        require_once("$CFG->dirroot/mod/resource/locallib.php");
-        return new resource_content_file_info($browser, $context, $storedfile, $urlbase, $areas[$filearea], true, true, true, false);
+        require_once("$CFG->dirroot/mod/syllabus/locallib.php");
+        return new syllabus_content_file_info($browser, $context, $storedfile, $urlbase, $areas[$filearea], true, true, true, false);
     }
 
-    // note: resource_intro handled in file_browser automatically
+    // note: syllabus_intro handled in file_browser automatically
 
     return null;
 }
 
 /**
- * Serves the resource files.
+ * Serves the syllabus files.
  *
- * @package  mod_resource
+ * @package  mod_syllabus
  * @category files
  * @param stdClass $course course object
  * @param stdClass $cm course module object
@@ -356,16 +356,16 @@ function resource_get_file_info($browser, $areas, $course, $cm, $context, $filea
  * @param array $options additional options affecting the file serving
  * @return bool false if file not found, does not return if found - just send the file
  */
-function resource_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options=array()) {
+function syllabus_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options=array()) {
     global $CFG, $DB;
-    require_once("$CFG->libdir/resourcelib.php");
+    require_once("$CFG->libdir/syllabuslib.php");
 
     if ($context->contextlevel != CONTEXT_MODULE) {
         return false;
     }
 
     require_course_login($course, true, $cm);
-    if (!has_capability('mod/resource:view', $context)) {
+    if (!has_capability('mod/syllabus:view', $context)) {
         return false;
     }
 
@@ -378,7 +378,7 @@ function resource_pluginfile($course, $cm, $context, $filearea, $args, $forcedow
 
     $fs = get_file_storage();
     $relativepath = implode('/', $args);
-    $fullpath = rtrim("/$context->id/mod_resource/$filearea/0/$relativepath", '/');
+    $fullpath = rtrim("/$context->id/mod_syllabus/$filearea/0/$relativepath", '/');
     do {
         if (!$file = $fs->get_file_by_hash(sha1($fullpath))) {
             if ($fs->get_file_by_hash(sha1("$fullpath/."))) {
@@ -392,23 +392,23 @@ function resource_pluginfile($course, $cm, $context, $filearea, $args, $forcedow
                     break;
                 }
             }
-            $resource = $DB->get_record('resource', array('id'=>$cm->instance), 'id, legacyfiles', MUST_EXIST);
-            if ($resource->legacyfiles != RESOURCELIB_LEGACYFILES_ACTIVE) {
+            $syllabus = $DB->get_record('syllabus', array('id'=>$cm->instance), 'id, legacyfiles', MUST_EXIST);
+            if ($syllabus->legacyfiles != syllabusLIB_LEGACYFILES_ACTIVE) {
                 return false;
             }
-            if (!$file = resourcelib_try_file_migration('/'.$relativepath, $cm->id, $cm->course, 'mod_resource', 'content', 0)) {
+            if (!$file = syllabuslib_try_file_migration('/'.$relativepath, $cm->id, $cm->course, 'mod_syllabus', 'content', 0)) {
                 return false;
             }
             // file migrate - update flag
-            $resource->legacyfileslast = time();
-            $DB->update_record('resource', $resource);
+            $syllabus->legacyfileslast = time();
+            $DB->update_record('syllabus', $syllabus);
         }
     } while (false);
 
     // should we apply filters?
     $mimetype = $file->get_mimetype();
     if ($mimetype === 'text/html' or $mimetype === 'text/plain' or $mimetype === 'application/xhtml+xml') {
-        $filter = $DB->get_field('resource', 'filterfiles', array('id'=>$cm->instance));
+        $filter = $DB->get_field('syllabus', 'filterfiles', array('id'=>$cm->instance));
         $CFG->embeddedsoforcelinktarget = true;
     } else {
         $filter = 0;
@@ -424,24 +424,24 @@ function resource_pluginfile($course, $cm, $context, $filearea, $args, $forcedow
  * @param stdClass $parentcontext Block's parent context
  * @param stdClass $currentcontext Current context of block
  */
-function resource_page_type_list($pagetype, $parentcontext, $currentcontext) {
-    $module_pagetype = array('mod-resource-*'=>get_string('page-mod-resource-x', 'resource'));
+function syllabus_page_type_list($pagetype, $parentcontext, $currentcontext) {
+    $module_pagetype = array('mod-syllabus-*'=>get_string('page-mod-syllabus-x', 'syllabus'));
     return $module_pagetype;
 }
 
 /**
- * Export file resource contents
+ * Export file syllabus contents
  *
  * @return array of file content
  */
-function resource_export_contents($cm, $baseurl) {
+function syllabus_export_contents($cm, $baseurl) {
     global $CFG, $DB;
     $contents = array();
     $context = context_module::instance($cm->id);
-    $resource = $DB->get_record('resource', array('id'=>$cm->instance), '*', MUST_EXIST);
+    $syllabus = $DB->get_record('syllabus', array('id'=>$cm->instance), '*', MUST_EXIST);
 
     $fs = get_file_storage();
-    $files = $fs->get_area_files($context->id, 'mod_resource', 'content', 0, 'sortorder DESC, id ASC', false);
+    $files = $fs->get_area_files($context->id, 'mod_syllabus', 'content', 0, 'sortorder DESC, id ASC', false);
 
     foreach ($files as $fileinfo) {
         $file = array();
@@ -449,7 +449,7 @@ function resource_export_contents($cm, $baseurl) {
         $file['filename']     = $fileinfo->get_filename();
         $file['filepath']     = $fileinfo->get_filepath();
         $file['filesize']     = $fileinfo->get_filesize();
-        $file['fileurl']      = file_encode_url("$CFG->wwwroot/" . $baseurl, '/'.$context->id.'/mod_resource/content/'.$resource->revision.$fileinfo->get_filepath().$fileinfo->get_filename(), true);
+        $file['fileurl']      = file_encode_url("$CFG->wwwroot/" . $baseurl, '/'.$context->id.'/mod_syllabus/content/'.$syllabus->revision.$fileinfo->get_filepath().$fileinfo->get_filename(), true);
         $file['timecreated']  = $fileinfo->get_timecreated();
         $file['timemodified'] = $fileinfo->get_timemodified();
         $file['sortorder']    = $fileinfo->get_sortorder();
@@ -471,9 +471,9 @@ function resource_export_contents($cm, $baseurl) {
  * Register the ability to handle drag and drop file uploads
  * @return array containing details of the files / types the mod can handle
  */
-function resource_dndupload_register() {
+function syllabus_dndupload_register() {
     return array('files' => array(
-                     array('extension' => '*', 'message' => get_string('dnduploadresource', 'mod_resource'))
+                     array('extension' => '*', 'message' => get_string('dnduploadsyllabus', 'mod_syllabus'))
                  ));
 }
 
@@ -482,7 +482,7 @@ function resource_dndupload_register() {
  * @param object $uploadinfo details of the file / content that has been uploaded
  * @return int instance id of the newly created mod
  */
-function resource_dndupload_handle($uploadinfo) {
+function syllabus_dndupload_handle($uploadinfo) {
     // Gather the required info.
     $data = new stdClass();
     $data->course = $uploadinfo->course->id;
@@ -493,7 +493,7 @@ function resource_dndupload_handle($uploadinfo) {
     $data->files = $uploadinfo->draftitemid;
 
     // Set the display options to the site defaults.
-    $config = get_config('resource');
+    $config = get_config('syllabus');
     $data->display = $config->display;
     $data->popupheight = $config->popupheight;
     $data->popupwidth = $config->popupwidth;
@@ -503,30 +503,30 @@ function resource_dndupload_handle($uploadinfo) {
     $data->showdate = (isset($config->showdate)) ? $config->showdate : 0;
     $data->filterfiles = $config->filterfiles;
 
-    return resource_add_instance($data, null);
+    return syllabus_add_instance($data, null);
 }
 
 /**
  * Mark the activity completed (if required) and trigger the course_module_viewed event.
  *
- * @param  stdClass $resource   resource object
+ * @param  stdClass $syllabus   syllabus object
  * @param  stdClass $course     course object
  * @param  stdClass $cm         course module object
  * @param  stdClass $context    context object
  * @since Moodle 3.0
  */
-function resource_view($resource, $course, $cm, $context) {
+function syllabus_view($syllabus, $course, $cm, $context) {
 
     // Trigger course_module_viewed event.
     $params = array(
         'context' => $context,
-        'objectid' => $resource->id
+        'objectid' => $syllabus->id
     );
 
-    $event = \mod_resource\event\course_module_viewed::create($params);
+    $event = \mod_syllabus\event\course_module_viewed::create($params);
     $event->add_record_snapshot('course_modules', $cm);
     $event->add_record_snapshot('course', $course);
-    $event->add_record_snapshot('resource', $resource);
+    $event->add_record_snapshot('syllabus', $syllabus);
     $event->trigger();
 
     // Completion.
@@ -543,7 +543,7 @@ function resource_view($resource, $course, $cm, $context) {
  * @return stdClass an object with the different type of areas indicating if they were updated or not
  * @since Moodle 3.2
  */
-function resource_check_updates_since(cm_info $cm, $from, $filter = array()) {
+function syllabus_check_updates_since(cm_info $cm, $from, $filter = array()) {
     $updates = course_check_module_updates_since($cm, $from, array('content'), $filter);
     return $updates;
 }
@@ -558,7 +558,7 @@ function resource_check_updates_since(cm_info $cm, $from, $filter = array()) {
  * @param \core_calendar\action_factory $factory
  * @return \core_calendar\local\event\entities\action_interface|null
  */
-function mod_resource_core_calendar_provide_event_action(calendar_event $event,
+function mod_syllabus_core_calendar_provide_event_action(calendar_event $event,
                                                       \core_calendar\action_factory $factory, $userid = 0) {
 
     global $USER;
@@ -567,7 +567,7 @@ function mod_resource_core_calendar_provide_event_action(calendar_event $event,
         $userid = $USER->id;
     }
 
-    $cm = get_fast_modinfo($event->courseid, $userid)->instances['resource'][$event->instance];
+    $cm = get_fast_modinfo($event->courseid, $userid)->instances['syllabus'][$event->instance];
 
     $completion = new \completion_info($cm->get_course());
 
@@ -579,7 +579,7 @@ function mod_resource_core_calendar_provide_event_action(calendar_event $event,
 
     return $factory->create_instance(
         get_string('view'),
-        new \moodle_url('/mod/resource/view.php', ['id' => $cm->id]),
+        new \moodle_url('/mod/syllabus/view.php', ['id' => $cm->id]),
         1,
         true
     );
@@ -593,8 +593,8 @@ function mod_resource_core_calendar_provide_event_action(calendar_event $event,
  * @param  array  $args The path (the part after the filearea and before the filename).
  * @return array The itemid and the filepath inside the $args path, for the defined filearea.
  */
-function mod_resource_get_path_from_pluginfile(string $filearea, array $args) : array {
-    // Resource never has an itemid (the number represents the revision but it's not stored in database).
+function mod_syllabus_get_path_from_pluginfile(string $filearea, array $args) : array {
+    // syllabus never has an itemid (the number represents the revision but it's not stored in database).
     array_shift($args);
 
     // Get the filepath.

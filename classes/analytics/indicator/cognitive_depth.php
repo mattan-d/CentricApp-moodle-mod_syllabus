@@ -15,21 +15,21 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Cognitive depth indicator - resource.
+ * Cognitive depth indicator - syllabus.
  *
- * @package   mod_resource
+ * @package   mod_syllabus
  * @copyright 2017 David Monllao {@link http://www.davidmonllao.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_resource\analytics\indicator;
+namespace mod_syllabus\analytics\indicator;
 
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Cognitive depth indicator - resource.
+ * Cognitive depth indicator - syllabus.
  *
- * @package   mod_resource
+ * @package   mod_syllabus
  * @copyright 2017 David Monllao {@link http://www.davidmonllao.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -43,7 +43,7 @@ class cognitive_depth extends activity_base {
      * @return \lang_string
      */
     public static function get_name() : \lang_string {
-        return new \lang_string('indicator:cognitivedepth', 'mod_resource');
+        return new \lang_string('indicator:cognitivedepth', 'mod_syllabus');
     }
 
     public function get_indicator_type() {

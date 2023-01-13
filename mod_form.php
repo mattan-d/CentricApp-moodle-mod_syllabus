@@ -16,30 +16,30 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Resource configuration form
+ * syllabus configuration form
  *
- * @package    mod_resource
- * @copyright  2009 Petr Skoda  {@link http://skodak.org}
+ * @package    mod_syllabus
+ * @copyright  2023 CentricApp  {@link https://centricapp.co}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die;
 
 require_once($CFG->dirroot.'/course/moodleform_mod.php');
-require_once($CFG->dirroot.'/mod/resource/locallib.php');
+require_once($CFG->dirroot.'/mod/syllabus/locallib.php');
 require_once($CFG->libdir.'/filelib.php');
 
-class mod_resource_mod_form extends moodleform_mod {
+class mod_syllabus_mod_form extends moodleform_mod {
     function definition() {
         global $CFG, $DB;
         $mform =& $this->_form;
 
-        $config = get_config('resource');
+        $config = get_config('syllabus');
 
         if ($this->current->instance and $this->current->tobemigrated) {
-            // resource not migrated yet
-            $resource_old = $DB->get_record('resource_old', array('oldid'=>$this->current->instance));
-            $mform->addElement('static', 'warning', '', get_string('notmigrated', 'resource', $resource_old->type));
+            // syllabus not migrated yet
+            $syllabus_old = $DB->get_record('syllabus_old', array('oldid'=>$this->current->instance));
+            $mform->addElement('static', 'warning', '', get_string('notmigrated', 'syllabus', $syllabus_old->type));
             $mform->addElement('cancel');
             $this->standard_hidden_coursemodule_elements();
             return;
@@ -69,19 +69,19 @@ class mod_resource_mod_form extends moodleform_mod {
         $mform->addElement('filemanager', 'files', get_string('selectfiles'), null, $filemanager_options);
 
         // add legacy files flag only if used
-        if (isset($this->current->legacyfiles) and $this->current->legacyfiles != RESOURCELIB_LEGACYFILES_NO) {
-            $options = array(RESOURCELIB_LEGACYFILES_DONE   => get_string('legacyfilesdone', 'resource'),
-                             RESOURCELIB_LEGACYFILES_ACTIVE => get_string('legacyfilesactive', 'resource'));
-            $mform->addElement('select', 'legacyfiles', get_string('legacyfiles', 'resource'), $options);
+        if (isset($this->current->legacyfiles) and $this->current->legacyfiles != syllabusLIB_LEGACYFILES_NO) {
+            $options = array(syllabusLIB_LEGACYFILES_DONE   => get_string('legacyfilesdone', 'syllabus'),
+                             syllabusLIB_LEGACYFILES_ACTIVE => get_string('legacyfilesactive', 'syllabus'));
+            $mform->addElement('select', 'legacyfiles', get_string('legacyfiles', 'syllabus'), $options);
         }
 
         //-------------------------------------------------------
         $mform->addElement('header', 'optionssection', get_string('appearance'));
 
         if ($this->current->instance) {
-            $options = resourcelib_get_displayoptions(explode(',', $config->displayoptions), $this->current->display);
+            $options = syllabuslib_get_displayoptions(explode(',', $config->displayoptions), $this->current->display);
         } else {
-            $options = resourcelib_get_displayoptions(explode(',', $config->displayoptions));
+            $options = syllabuslib_get_displayoptions(explode(',', $config->displayoptions));
         }
 
         if (count($options) == 1) {
@@ -90,52 +90,52 @@ class mod_resource_mod_form extends moodleform_mod {
             reset($options);
             $mform->setDefault('display', key($options));
         } else {
-            $mform->addElement('select', 'display', get_string('displayselect', 'resource'), $options);
+            $mform->addElement('select', 'display', get_string('displayselect', 'syllabus'), $options);
             $mform->setDefault('display', $config->display);
-            $mform->addHelpButton('display', 'displayselect', 'resource');
+            $mform->addHelpButton('display', 'displayselect', 'syllabus');
         }
 
-        $mform->addElement('checkbox', 'showsize', get_string('showsize', 'resource'));
+        $mform->addElement('checkbox', 'showsize', get_string('showsize', 'syllabus'));
         $mform->setDefault('showsize', $config->showsize);
-        $mform->addHelpButton('showsize', 'showsize', 'resource');
-        $mform->addElement('checkbox', 'showtype', get_string('showtype', 'resource'));
+        $mform->addHelpButton('showsize', 'showsize', 'syllabus');
+        $mform->addElement('checkbox', 'showtype', get_string('showtype', 'syllabus'));
         $mform->setDefault('showtype', $config->showtype);
-        $mform->addHelpButton('showtype', 'showtype', 'resource');
-        $mform->addElement('checkbox', 'showdate', get_string('showdate', 'resource'));
+        $mform->addHelpButton('showtype', 'showtype', 'syllabus');
+        $mform->addElement('checkbox', 'showdate', get_string('showdate', 'syllabus'));
         $mform->setDefault('showdate', $config->showdate);
-        $mform->addHelpButton('showdate', 'showdate', 'resource');
+        $mform->addHelpButton('showdate', 'showdate', 'syllabus');
 
-        if (array_key_exists(RESOURCELIB_DISPLAY_POPUP, $options)) {
-            $mform->addElement('text', 'popupwidth', get_string('popupwidth', 'resource'), array('size'=>3));
+        if (array_key_exists(syllabusLIB_DISPLAY_POPUP, $options)) {
+            $mform->addElement('text', 'popupwidth', get_string('popupwidth', 'syllabus'), array('size'=>3));
             if (count($options) > 1) {
-                $mform->hideIf('popupwidth', 'display', 'noteq', RESOURCELIB_DISPLAY_POPUP);
+                $mform->hideIf('popupwidth', 'display', 'noteq', syllabusLIB_DISPLAY_POPUP);
             }
             $mform->setType('popupwidth', PARAM_INT);
             $mform->setDefault('popupwidth', $config->popupwidth);
             $mform->setAdvanced('popupwidth', true);
 
-            $mform->addElement('text', 'popupheight', get_string('popupheight', 'resource'), array('size'=>3));
+            $mform->addElement('text', 'popupheight', get_string('popupheight', 'syllabus'), array('size'=>3));
             if (count($options) > 1) {
-                $mform->hideIf('popupheight', 'display', 'noteq', RESOURCELIB_DISPLAY_POPUP);
+                $mform->hideIf('popupheight', 'display', 'noteq', syllabusLIB_DISPLAY_POPUP);
             }
             $mform->setType('popupheight', PARAM_INT);
             $mform->setDefault('popupheight', $config->popupheight);
             $mform->setAdvanced('popupheight', true);
         }
 
-        if (array_key_exists(RESOURCELIB_DISPLAY_AUTO, $options) or
-          array_key_exists(RESOURCELIB_DISPLAY_EMBED, $options) or
-          array_key_exists(RESOURCELIB_DISPLAY_FRAME, $options)) {
-            $mform->addElement('checkbox', 'printintro', get_string('printintro', 'resource'));
-            $mform->hideIf('printintro', 'display', 'eq', RESOURCELIB_DISPLAY_POPUP);
-            $mform->hideIf('printintro', 'display', 'eq', RESOURCELIB_DISPLAY_DOWNLOAD);
-            $mform->hideIf('printintro', 'display', 'eq', RESOURCELIB_DISPLAY_OPEN);
-            $mform->hideIf('printintro', 'display', 'eq', RESOURCELIB_DISPLAY_NEW);
+        if (array_key_exists(syllabusLIB_DISPLAY_AUTO, $options) or
+          array_key_exists(syllabusLIB_DISPLAY_EMBED, $options) or
+          array_key_exists(syllabusLIB_DISPLAY_FRAME, $options)) {
+            $mform->addElement('checkbox', 'printintro', get_string('printintro', 'syllabus'));
+            $mform->hideIf('printintro', 'display', 'eq', syllabusLIB_DISPLAY_POPUP);
+            $mform->hideIf('printintro', 'display', 'eq', syllabusLIB_DISPLAY_DOWNLOAD);
+            $mform->hideIf('printintro', 'display', 'eq', syllabusLIB_DISPLAY_OPEN);
+            $mform->hideIf('printintro', 'display', 'eq', syllabusLIB_DISPLAY_NEW);
             $mform->setDefault('printintro', $config->printintro);
         }
 
         $options = array('0' => get_string('none'), '1' => get_string('allfiles'), '2' => get_string('htmlfilesonly'));
-        $mform->addElement('select', 'filterfiles', get_string('filterfiles', 'resource'), $options);
+        $mform->addElement('select', 'filterfiles', get_string('filterfiles', 'syllabus'), $options);
         $mform->setDefault('filterfiles', $config->filterfiles);
         $mform->setAdvanced('filterfiles', true);
 
@@ -154,7 +154,7 @@ class mod_resource_mod_form extends moodleform_mod {
     function data_preprocessing(&$default_values) {
         if ($this->current->instance and !$this->current->tobemigrated) {
             $draftitemid = file_get_submitted_draft_itemid('files');
-            file_prepare_draft_area($draftitemid, $this->context->id, 'mod_resource', 'content', 0, array('subdirs'=>true));
+            file_prepare_draft_area($draftitemid, $this->context->id, 'mod_syllabus', 'content', 0, array('subdirs'=>true));
             $default_values['files'] = $draftitemid;
         }
         if (!empty($default_values['displayoptions'])) {
@@ -190,7 +190,7 @@ class mod_resource_mod_form extends moodleform_mod {
 
     function definition_after_data() {
         if ($this->current->instance and $this->current->tobemigrated) {
-            // resource not migrated yet
+            // syllabus not migrated yet
             return;
         }
 

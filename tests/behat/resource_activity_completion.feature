@@ -1,8 +1,8 @@
-@mod @mod_resource @core_completion @_file_upload
-Feature: View activity completion information for file resources
-  In order to have visibility of file resource completion requirements
+@mod @mod_syllabus @core_completion @_file_upload
+Feature: View activity completion information for file syllabuss
+  In order to have visibility of file syllabus completion requirements
   As a student
-  I need to be able to view my file resource completion progress
+  I need to be able to view my file syllabus completion progress
 
   Background:
     Given the following "users" exist:
@@ -17,7 +17,7 @@ Feature: View activity completion information for file resources
       | student1 | C1     | student        |
       | teacher1 | C1     | editingteacher |
     And the following config values are set as admin:
-      | displayoptions | 0,1,2,3,4,5,6 | resource |
+      | displayoptions | 0,1,2,3,4,5,6 | syllabus |
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
     And I navigate to "Settings" in current page administration
@@ -38,7 +38,7 @@ Feature: View activity completion information for file resources
       | Show type                 | 0                                                    |
       | Show upload/modified date | 0                                                    |
       | Completion tracking       | Students can manually mark the activity as completed |
-    And I upload "mod/resource/tests/fixtures/samplefile.txt" file to "Select files" filemanager
+    And I upload "mod/syllabus/tests/fixtures/samplefile.txt" file to "Select files" filemanager
     And I press "Save and return to course"
     # Teacher view.
     And the manual completion button for "Myfile" should exist
@@ -72,12 +72,12 @@ Feature: View activity completion information for file resources
       | Name                | Myfile                                               |
       | id_display          | Embed                                                |
       | Completion tracking | Students can manually mark the activity as completed |
-    And I upload "mod/resource/tests/fixtures/samplefile.txt" file to "Select files" filemanager
+    And I upload "mod/syllabus/tests/fixtures/samplefile.txt" file to "Select files" filemanager
     And I click on "Save and return to course" "button"
     # Teacher view.
     And the manual completion button for "Myfile" should exist
     And the manual completion button for "Myfile" should be disabled
-    And I am on the "Myfile" "resource activity" page
+    And I am on the "Myfile" "syllabus activity" page
     And the manual completion button for "Myfile" should exist
     And the manual completion button for "Myfile" should be disabled
     And I log out
@@ -85,7 +85,7 @@ Feature: View activity completion information for file resources
     When I log in as "student1"
     And I am on "Course 1" course homepage
     Then the manual completion button for "Myfile" should exist
-    And I am on the "Myfile" "resource activity" page
+    And I am on the "Myfile" "syllabus activity" page
     And the manual completion button of "Myfile" is displayed as "Mark as done"
     And I toggle the manual completion state of "Myfile"
     And the manual completion button of "Myfile" is displayed as "Done"
@@ -103,15 +103,15 @@ Feature: View activity completion information for file resources
       | id_display          | Embed                                             |
       | Completion tracking | Show activity as complete when conditions are met |
       | Require view        | 1                                                 |
-    And I upload "mod/resource/tests/fixtures/samplefile.txt" file to "Select files" filemanager
+    And I upload "mod/syllabus/tests/fixtures/samplefile.txt" file to "Select files" filemanager
     And I press "Save and display"
     And I am on "Course 1" course homepage
     # Teacher view.
-    And I am on the "Myfile" "resource activity" page
+    And I am on the "Myfile" "syllabus activity" page
     And "Myfile" should have the "View" completion condition
     And I log out
     # Student view.
     When I log in as "student1"
     And I am on "Course 1" course homepage
-    And I am on the "Myfile" "resource activity" page
+    And I am on the "Myfile" "syllabus activity" page
     Then the "View" completion condition of "Myfile" is displayed as "done"

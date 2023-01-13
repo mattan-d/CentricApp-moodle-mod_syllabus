@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="mod/resource/db" VERSION="20120122" COMMENT="XMLDB file for Resource module"
+<XMLDB PATH="mod/syllabus/db" VERSION="20120122" COMMENT="XMLDB file for Syllabus module"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
   <TABLES>
-    <TABLE NAME="resource" COMMENT="Each record is one resource and its config data">
+    <TABLE NAME="syllabus" COMMENT="Each record is one syllabus and its config data">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
@@ -27,7 +27,7 @@
         <INDEX NAME="course" UNIQUE="false" FIELDS="course"/>
       </INDEXES>
     </TABLE>
-    <TABLE NAME="resource_old" COMMENT="backup of all old resource instances from 1.9">
+    <TABLE NAME="syllabus_old" COMMENT="backup of all old syllabus instances from 1.9">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>

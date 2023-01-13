@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Resource module capability definition
+ * Syllabus module capability definition
  *
- * @package    mod_resource
+ * @package    mod_syllabus
  * @copyright  2009 Petr Skoda  {@link http://skodak.org}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die;
 
 $capabilities = array(
-    'mod/resource:view' => array(
+    'mod/syllabus:view' => array(
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => array(
@@ -34,7 +34,7 @@ $capabilities = array(
         )
     ),
 
-    'mod/resource:addinstance' => array(
+    'mod/syllabus:addinstance' => array(
         'riskbitmask' => RISK_XSS,
 
         'captype' => 'write',
@@ -47,7 +47,7 @@ $capabilities = array(
     ),
 
 /* TODO: review public portfolio API first!
-    'mod/resource:portfolioexport' => array(
+    'mod/syllabus:portfolioexport' => array(
 
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,

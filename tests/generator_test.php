@@ -14,12 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace mod_resource;
+namespace mod_syllabus;
 
 /**
  * PHPUnit data generator testcase.
  *
- * @package    mod_resource
+ * @package    mod_syllabus
  * @category phpunit
  * @copyright 2013 The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -30,51 +30,51 @@ class generator_test extends \advanced_testcase {
 
         $this->resetAfterTest(true);
 
-        // Must be a non-guest user to create resources.
+        // Must be a non-guest user to create syllabuss.
         $this->setAdminUser();
 
-        // There are 0 resources initially.
-        $this->assertEquals(0, $DB->count_records('resource'));
+        // There are 0 syllabuss initially.
+        $this->assertEquals(0, $DB->count_records('syllabus'));
 
         // Create the generator object and do standard checks.
-        $generator = $this->getDataGenerator()->get_plugin_generator('mod_resource');
-        $this->assertInstanceOf('mod_resource_generator', $generator);
-        $this->assertEquals('resource', $generator->get_modulename());
+        $generator = $this->getDataGenerator()->get_plugin_generator('mod_syllabus');
+        $this->assertInstanceOf('mod_syllabus_generator', $generator);
+        $this->assertEquals('syllabus', $generator->get_modulename());
 
         // Create three instances in the site course.
         $generator->create_instance(array('course' => $SITE->id));
         $generator->create_instance(array('course' => $SITE->id));
-        $resource = $generator->create_instance(array('course' => $SITE->id));
-        $this->assertEquals(3, $DB->count_records('resource'));
+        $syllabus = $generator->create_instance(array('course' => $SITE->id));
+        $this->assertEquals(3, $DB->count_records('syllabus'));
 
         // Check the course-module is correct.
-        $cm = get_coursemodule_from_instance('resource', $resource->id);
-        $this->assertEquals($resource->id, $cm->instance);
-        $this->assertEquals('resource', $cm->modname);
+        $cm = get_coursemodule_from_instance('syllabus', $syllabus->id);
+        $this->assertEquals($syllabus->id, $cm->instance);
+        $this->assertEquals('syllabus', $cm->modname);
         $this->assertEquals($SITE->id, $cm->course);
 
         // Check the context is correct.
         $context = \context_module::instance($cm->id);
-        $this->assertEquals($resource->cmid, $context->instanceid);
+        $this->assertEquals($syllabus->cmid, $context->instanceid);
 
-        // Check that generated resource module contains a file.
+        // Check that generated Syllabus module contains a file.
         $fs = get_file_storage();
-        $files = $fs->get_area_files($context->id, 'mod_resource', 'content', false, '', false);
+        $files = $fs->get_area_files($context->id, 'mod_syllabus', 'content', false, '', false);
         $file = array_values($files)[0];
         $this->assertCount(1, $files);
-        $this->assertEquals('resource3.txt', $file->get_filename());
-        $this->assertEquals('Test resource resource3.txt file', $file->get_content());
+        $this->assertEquals('syllabus3.txt', $file->get_filename());
+        $this->assertEquals('Test syllabus syllabus3.txt file', $file->get_content());
 
-        // Create a new resource specifying the file name.
-        $resource = $generator->create_instance(['course' => $SITE->id, 'defaultfilename' => 'myfile.pdf']);
+        // Create a new syllabus specifying the file name.
+        $syllabus = $generator->create_instance(['course' => $SITE->id, 'defaultfilename' => 'myfile.pdf']);
 
-        // Check that generated resource module contains a file with the specified name.
-        $cm = get_coursemodule_from_instance('resource', $resource->id);
+        // Check that generated Syllabus module contains a file with the specified name.
+        $cm = get_coursemodule_from_instance('syllabus', $syllabus->id);
         $context = \context_module::instance($cm->id);
-        $files = $fs->get_area_files($context->id, 'mod_resource', 'content', false, '', false);
+        $files = $fs->get_area_files($context->id, 'mod_syllabus', 'content', false, '', false);
         $file = array_values($files)[0];
         $this->assertCount(1, $files);
         $this->assertEquals('myfile.pdf', $file->get_filename());
-        $this->assertEquals('Test resource myfile.pdf file', $file->get_content());
+        $this->assertEquals('Test syllabus myfile.pdf file', $file->get_content());
     }
 }

@@ -17,17 +17,17 @@
 /**
  * Events test.
  *
- * @package    mod_resource
+ * @package    mod_syllabus
  * @copyright  2014 Rajesh Taneja <rajesh@moodle.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_resource\event;
+namespace mod_syllabus\event;
 
 /**
- * Resource events test cases.
+ * syllabus events test cases.
  *
- * @package    mod_resource
+ * @package    mod_syllabus
  * @copyright  2014 Rajesh Taneja <rajesh@moodle.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -39,7 +39,7 @@ class events_test extends \advanced_testcase {
     public function setUp(): void {
         $this->resetAfterTest();
 
-        // Must be a non-guest user to create resources.
+        // Must be a non-guest user to create syllabuss.
         $this->setAdminUser();
     }
 
@@ -54,7 +54,7 @@ class events_test extends \advanced_testcase {
         $params = array(
             'context' => \context_course::instance($course->id)
         );
-        $event = \mod_resource\event\course_module_instance_list_viewed::create($params);
+        $event = \mod_syllabus\event\course_module_instance_list_viewed::create($params);
 
         // Triggering and capturing the event.
         $sink = $this->redirectEvents();
@@ -64,9 +64,9 @@ class events_test extends \advanced_testcase {
         $event = reset($events);
 
         // Checking that the event contains the expected values.
-        $this->assertInstanceOf('\mod_resource\event\course_module_instance_list_viewed', $event);
+        $this->assertInstanceOf('\mod_syllabus\event\course_module_instance_list_viewed', $event);
         $this->assertEquals(\context_course::instance($course->id), $event->get_context());
-        $expected = array($course->id, 'resource', 'view all', 'index.php?id='.$course->id, '');
+        $expected = array($course->id, 'syllabus', 'view all', 'index.php?id='.$course->id, '');
         $this->assertEventLegacyLogData($expected, $event);
         $this->assertEventContextNotUsed($event);
     }
@@ -79,13 +79,13 @@ class events_test extends \advanced_testcase {
         // doing here is simply making sure that the events returns the right information.
 
         $course = $this->getDataGenerator()->create_course();
-        $resource = $this->getDataGenerator()->create_module('resource', array('course' => $course->id));
+        $syllabus = $this->getDataGenerator()->create_module('syllabus', array('course' => $course->id));
 
         $params = array(
-            'context' => \context_module::instance($resource->cmid),
-            'objectid' => $resource->id
+            'context' => \context_module::instance($syllabus->cmid),
+            'objectid' => $syllabus->id
         );
-        $event = \mod_resource\event\course_module_viewed::create($params);
+        $event = \mod_syllabus\event\course_module_viewed::create($params);
 
         // Triggering and capturing the event.
         $sink = $this->redirectEvents();
@@ -95,10 +95,10 @@ class events_test extends \advanced_testcase {
         $event = reset($events);
 
         // Checking that the event contains the expected values.
-        $this->assertInstanceOf('\mod_resource\event\course_module_viewed', $event);
-        $this->assertEquals(\context_module::instance($resource->cmid), $event->get_context());
-        $this->assertEquals($resource->id, $event->objectid);
-        $expected = array($course->id, 'resource', 'view', 'view.php?id=' . $resource->cmid, $resource->id, $resource->cmid);
+        $this->assertInstanceOf('\mod_syllabus\event\course_module_viewed', $event);
+        $this->assertEquals(\context_module::instance($syllabus->cmid), $event->get_context());
+        $this->assertEquals($syllabus->id, $event->objectid);
+        $expected = array($course->id, 'syllabus', 'view', 'view.php?id=' . $syllabus->cmid, $syllabus->id, $syllabus->cmid);
         $this->assertEventLegacyLogData($expected, $event);
         $this->assertEventContextNotUsed($event);
     }

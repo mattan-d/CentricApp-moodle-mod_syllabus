@@ -18,7 +18,7 @@
 /**
  * Provides support for the conversion of moodle1 backup to the moodle2 format
  *
- * @package    mod_resource
+ * @package    mod_syllabus
  * @copyright  2011 Andrew Davis <andrew@moodle.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -26,14 +26,14 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Resource conversion handler
+ * syllabus conversion handler
  */
-class moodle1_mod_resource_handler extends moodle1_mod_handler {
+class moodle1_mod_syllabus_handler extends moodle1_mod_handler {
 
     /** @var moodle1_file_manager instance */
     protected $fileman = null;
 
-    /** @var array of resource successors handlers */
+    /** @var array of syllabus successors handlers */
     private $successors = array();
 
     /**
@@ -43,7 +43,7 @@ class moodle1_mod_resource_handler extends moodle1_mod_handler {
      * For each path returned, the corresponding conversion method must be
      * defined.
      *
-     * Note that the paths /MOODLE_BACKUP/COURSE/MODULES/MOD/RESOURCE do not
+     * Note that the paths /MOODLE_BACKUP/COURSE/MODULES/MOD/syllabus do not
      * actually exist in the file. The last element with the module name was
      * appended by the moodle1_converter class.
      *
@@ -52,7 +52,7 @@ class moodle1_mod_resource_handler extends moodle1_mod_handler {
     public function get_paths() {
         return array(
             new convert_path(
-                'resource', '/MOODLE_BACKUP/COURSE/MODULES/MOD/RESOURCE',
+                'syllabus', '/MOODLE_BACKUP/COURSE/MODULES/MOD/syllabus',
                 array(
                     'renamefields' => array(
                         'summary' => 'intro',
@@ -69,14 +69,14 @@ class moodle1_mod_resource_handler extends moodle1_mod_handler {
     }
 
     /**
-     * Converts /MOODLE_BACKUP/COURSE/MODULES/MOD/RESOURCE data
+     * Converts /MOODLE_BACKUP/COURSE/MODULES/MOD/syllabus data
      *
-     * This methods detects the resource type and eventually re-dispatches it to the
-     * corresponding resource successor (url, forum, page, imscp).
+     * This methods detects the syllabus type and eventually re-dispatches it to the
+     * corresponding syllabus successor (url, forum, page, imscp).
      */
-    public function process_resource(array $data, array $raw) {
+    public function process_syllabus(array $data, array $raw) {
         global $CFG;
-        require_once("$CFG->libdir/resourcelib.php");
+        require_once("$CFG->libdir/syllabuslib.php");
 
         // replay the upgrade step 2009042001
         if ($CFG->texteditors !== 'textarea') {
@@ -92,24 +92,24 @@ class moodle1_mod_resource_handler extends moodle1_mod_handler {
             $data['options'] = '';
         }
 
-        // decide if the legacy resource should be handled by a successor module
+        // decide if the legacy syllabus should be handled by a successor module
         if ($successor = $this->get_successor($data['type'], $data['reference'])) {
             // the instance id will be kept
             $instanceid = $data['id'];
 
-            // move the instance from the resource's modinfo stash to the successor's
+            // move the instance from the syllabus's modinfo stash to the successor's
             // modinfo stash
-            $resourcemodinfo  = $this->converter->get_stash('modinfo_resource');
+            $syllabusmodinfo  = $this->converter->get_stash('modinfo_syllabus');
             $successormodinfo = $this->converter->get_stash('modinfo_'.$successor->get_modname());
-            $successormodinfo['instances'][$instanceid] = $resourcemodinfo['instances'][$instanceid];
-            unset($resourcemodinfo['instances'][$instanceid]);
-            $this->converter->set_stash('modinfo_resource', $resourcemodinfo);
+            $successormodinfo['instances'][$instanceid] = $syllabusmodinfo['instances'][$instanceid];
+            unset($syllabusmodinfo['instances'][$instanceid]);
+            $this->converter->set_stash('modinfo_syllabus', $syllabusmodinfo);
             $this->converter->set_stash('modinfo_'.$successor->get_modname(), $successormodinfo);
 
-            // get the course module information for the legacy resource module
+            // get the course module information for the legacy Syllabus module
             $cminfo = $this->get_cminfo($instanceid);
 
-            // use the version of the successor instead of the current mod/resource
+            // use the version of the successor instead of the current mod/syllabus
             // beware - the version.php declares info via $module object, do not use
             // a variable of such name here
             $plugin = new stdClass();
@@ -128,36 +128,36 @@ class moodle1_mod_resource_handler extends moodle1_mod_handler {
             $this->converter->set_stash('coursecontents', $coursecontents);
 
             // delegate the processing to the successor handler
-            return $successor->process_legacy_resource($data, $raw);
+            return $successor->process_legacy_syllabus($data, $raw);
         }
 
-        // no successor is interested in this record, convert it to the new mod_resource (aka File module)
+        // no successor is interested in this record, convert it to the new mod_syllabus (aka File module)
 
-        $resource = array();
-        $resource['id']              = $data['id'];
-        $resource['name']            = $data['name'];
-        $resource['intro']           = $data['intro'];
-        $resource['introformat']     = $data['introformat'];
-        $resource['tobemigrated']    = 0;
-        $resource['legacyfiles']     = RESOURCELIB_LEGACYFILES_ACTIVE;
-        $resource['legacyfileslast'] = null;
-        $resource['filterfiles']     = 0;
-        $resource['revision']        = 1;
-        $resource['timemodified']    = $data['timemodified'];
+        $syllabus = array();
+        $syllabus['id']              = $data['id'];
+        $syllabus['name']            = $data['name'];
+        $syllabus['intro']           = $data['intro'];
+        $syllabus['introformat']     = $data['introformat'];
+        $syllabus['tobemigrated']    = 0;
+        $syllabus['legacyfiles']     = syllabusLIB_LEGACYFILES_ACTIVE;
+        $syllabus['legacyfileslast'] = null;
+        $syllabus['filterfiles']     = 0;
+        $syllabus['revision']        = 1;
+        $syllabus['timemodified']    = $data['timemodified'];
 
         // populate display and displayoptions fields
         $options = array('printintro' => 1);
         if ($data['options'] == 'frame') {
-            $resource['display'] = RESOURCELIB_DISPLAY_FRAME;
+            $syllabus['display'] = syllabusLIB_DISPLAY_FRAME;
 
         } else if ($data['options'] == 'objectframe') {
-            $resource['display'] = RESOURCELIB_DISPLAY_EMBED;
+            $syllabus['display'] = syllabusLIB_DISPLAY_EMBED;
 
         } else if ($data['options'] == 'forcedownload') {
-            $resource['display'] = RESOURCELIB_DISPLAY_DOWNLOAD;
+            $syllabus['display'] = syllabusLIB_DISPLAY_DOWNLOAD;
 
         } else if ($data['popup']) {
-            $resource['display'] = RESOURCELIB_DISPLAY_POPUP;
+            $syllabus['display'] = syllabusLIB_DISPLAY_POPUP;
             $rawoptions = explode(',', $data['popup']);
             foreach ($rawoptions as $rawoption) {
                 list($name, $value) = explode('=', trim($rawoption), 2);
@@ -168,23 +168,23 @@ class moodle1_mod_resource_handler extends moodle1_mod_handler {
             }
 
         } else {
-            $resource['display'] = RESOURCELIB_DISPLAY_AUTO;
+            $syllabus['display'] = syllabusLIB_DISPLAY_AUTO;
         }
-        $resource['displayoptions'] = serialize($options);
+        $syllabus['displayoptions'] = serialize($options);
 
         // get the course module id and context id
-        $instanceid     = $resource['id'];
+        $instanceid     = $syllabus['id'];
         $currentcminfo  = $this->get_cminfo($instanceid);
         $moduleid       = $currentcminfo['id'];
         $contextid      = $this->converter->get_contextid(CONTEXT_MODULE, $moduleid);
 
         // get a fresh new file manager for this instance
-        $this->fileman = $this->converter->get_file_manager($contextid, 'mod_resource');
+        $this->fileman = $this->converter->get_file_manager($contextid, 'mod_syllabus');
 
         // convert course files embedded into the intro
         $this->fileman->filearea = 'intro';
         $this->fileman->itemid   = 0;
-        $resource['intro'] = moodle1_converter::migrate_referenced_files($resource['intro'], $this->fileman);
+        $syllabus['intro'] = moodle1_converter::migrate_referenced_files($syllabus['intro'], $this->fileman);
 
         // convert the referenced file itself as a main file in the content area
         $reference = $data['reference'];
@@ -206,19 +206,19 @@ class moodle1_mod_resource_handler extends moodle1_mod_handler {
             $this->fileman->migrate_file('course_files/'.$reference, $curfilepath, null, 1);
         } catch (moodle1_convert_exception $e) {
             // the file probably does not exist
-            $this->log('error migrating the resource main file', backup::LOG_WARNING, 'course_files/'.$reference);
+            $this->log('error migrating the syllabus main file', backup::LOG_WARNING, 'course_files/'.$reference);
         }
 
-        // write resource.xml
-        $this->open_xml_writer("activities/resource_{$moduleid}/resource.xml");
+        // write syllabus.xml
+        $this->open_xml_writer("activities/syllabus_{$moduleid}/syllabus.xml");
         $this->xmlwriter->begin_tag('activity', array('id' => $instanceid, 'moduleid' => $moduleid,
-            'modulename' => 'resource', 'contextid' => $contextid));
-        $this->write_xml('resource', $resource, array('/resource/id'));
+            'modulename' => 'syllabus', 'contextid' => $contextid));
+        $this->write_xml('syllabus', $syllabus, array('/syllabus/id'));
         $this->xmlwriter->end_tag('activity');
         $this->close_xml_writer();
 
         // write inforef.xml
-        $this->open_xml_writer("activities/resource_{$currentcminfo['id']}/inforef.xml");
+        $this->open_xml_writer("activities/syllabus_{$currentcminfo['id']}/inforef.xml");
         $this->xmlwriter->begin_tag('inforef');
         $this->xmlwriter->begin_tag('fileref');
         foreach ($this->fileman->get_fileids() as $fileid) {
@@ -232,18 +232,18 @@ class moodle1_mod_resource_handler extends moodle1_mod_handler {
     /**
      * Give succesors a chance to finish their job
      */
-    public function on_resource_end(array $data) {
+    public function on_syllabus_end(array $data) {
         if ($successor = $this->get_successor($data['type'], $data['reference'])) {
-            $successor->on_legacy_resource_end($data);
+            $successor->on_legacy_syllabus_end($data);
         }
     }
 
     /// internal implementation details follow /////////////////////////////////
 
     /**
-     * Returns the handler of the new 2.0 mod type according the given type of the legacy 1.9 resource
+     * Returns the handler of the new 2.0 mod type according the given type of the legacy 1.9 syllabus
      *
-     * @param string $type the value of the 'type' field in 1.9 resource
+     * @param string $type the value of the 'type' field in 1.9 syllabus
      * @param string $reference a file path. Necessary to differentiate files from web URLs
      * @throws moodle1_convert_exception for the unknown types
      * @return null|moodle1_mod_handler the instance of the handler, or null if the type does not have a successor
@@ -263,7 +263,7 @@ class moodle1_mod_resource_handler extends moodle1_mod_handler {
                 break;
             case 'file':
                 // if starts with $@FILEPHP@$ then it is URL link to a local course file
-                // to be migrated to the new resource module
+                // to be migrated to the new Syllabus module
                 if (strpos($reference, '$@FILEPHP@$') === 0) {
                     $name = null;
                     break;
@@ -276,7 +276,7 @@ class moodle1_mod_resource_handler extends moodle1_mod_handler {
                 }
                 break;
             default:
-                throw new moodle1_convert_exception('unknown_resource_successor', $type);
+                throw new moodle1_convert_exception('unknown_syllabus_successor', $type);
         }
 
         if (is_null($name)) {
@@ -284,7 +284,7 @@ class moodle1_mod_resource_handler extends moodle1_mod_handler {
         }
 
         if (!isset($this->successors[$name])) {
-            $this->log('preparing resource successor handler', backup::LOG_DEBUG, $name);
+            $this->log('preparing syllabus successor handler', backup::LOG_DEBUG, $name);
             $class = 'moodle1_mod_'.$name.'_handler';
             $this->successors[$name] = new $class($this->converter, 'mod', $name);
 
@@ -295,7 +295,7 @@ class moodle1_mod_resource_handler extends moodle1_mod_handler {
             $this->converter->set_stash('modnameslist', $modnames);
 
             // add the successor's modinfo stash
-            $modinfo = $this->converter->get_stash('modinfo_resource');
+            $modinfo = $this->converter->get_stash('modinfo_syllabus');
             $modinfo['name'] = $name;
             $modinfo['instances'] = array();
             $this->converter->set_stash('modinfo_'.$name, $modinfo);

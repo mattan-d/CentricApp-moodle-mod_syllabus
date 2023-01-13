@@ -15,44 +15,46 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * List of deprecated mod_resource functions.
+ * List of deprecated mod_syllabus functions.
  *
- * @package   mod_resource
+ * @package   mod_syllabus
  * @copyright 2021 Peter D
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 /**
- * Print resource heading.
+ * Print syllabus heading.
  *
- * @deprecated since Moodle 4.0
- * @param object $resource
+ * @param object $syllabus
  * @param object $cm
  * @param object $course
  * @param bool $notused This variable is no longer used
  * @return void
+ * @deprecated since Moodle 4.0
  */
-function resource_print_heading($resource, $cm, $course, $notused = false) {
+function syllabus_print_heading($syllabus, $cm, $course, $notused = false)
+{
     global $OUTPUT;
-    debugging('resource_print_heading is deprecated. Handled by activity_header now.', DEBUG_DEVELOPER);
-    echo $OUTPUT->heading(format_string($resource->name), 2);
+    debugging('syllabus_print_heading is deprecated. Handled by activity_header now.', DEBUG_DEVELOPER);
+    echo $OUTPUT->heading(format_string($syllabus->name), 2);
 }
 
 /**
- * Print resource introduction.
+ * Print syllabus introduction.
  *
- * @deprecated since Moodle 4.0
- * @param object $resource
+ * @param object $syllabus
  * @param object $cm
  * @param object $course
  * @param bool $ignoresettings print even if not specified in modedit
  * @return void
+ * @deprecated since Moodle 4.0
  */
-function resource_print_intro($resource, $cm, $course, $ignoresettings=false) {
+function syllabus_print_intro($syllabus, $cm, $course, $ignoresettings = false)
+{
     global $OUTPUT;
-    debugging('resource_print_intro is deprecated. Handled by activity_header now.', DEBUG_DEVELOPER);
-    if ($intro = resource_get_intro($resource, $cm, $ignoresettings)) {
-        echo $OUTPUT->box_start('mod_introbox', 'resourceintro');
+    debugging('syllabus_print_intro is deprecated. Handled by activity_header now.', DEBUG_DEVELOPER);
+    if ($intro = syllabus_get_intro($syllabus, $cm, $ignoresettings)) {
+        echo $OUTPUT->box_start('mod_introbox', 'syllabusintro');
         echo $intro;
         echo $OUTPUT->box_end();
     }

@@ -16,17 +16,17 @@
 
 declare(strict_types=1);
 
-namespace mod_resource\completion;
+namespace mod_syllabus\completion;
 
 use core_completion\activity_custom_completion;
 
 /**
- * Activity custom completion subclass for the resource.
+ * Activity custom completion subclass for the syllabus.
  *
- * Class for defining mod_resource's custom completion rules and fetching the completion statuses
- * of the custom completion rules for a given resource instance and a user.
+ * Class for defining mod_syllabus's custom completion rules and fetching the completion statuses
+ * of the custom completion rules for a given syllabus instance and a user.
  *
- * @package    mod_resource
+ * @package    mod_syllabus
  * @copyright  2021 Huong Nguyen <huongn@moodle.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -48,7 +48,7 @@ class custom_completion extends activity_custom_completion {
      * @return array
      */
     public static function get_defined_custom_rules(): array {
-        // This activity/resource do not have any custom rules.
+        // This activity/syllabus do not have any custom rules.
         return [];
     }
 
@@ -58,7 +58,7 @@ class custom_completion extends activity_custom_completion {
      * @return array
      */
     public function get_custom_rule_descriptions(): array {
-        // This activity/resource do not have any custom rule descriptions.
+        // This activity/syllabus do not have any custom rule descriptions.
         return [];
     }
 
@@ -71,10 +71,10 @@ class custom_completion extends activity_custom_completion {
         $display = $this->cm->customdata['display'] ?? null;
 
         $displaytypes = [
-                RESOURCELIB_DISPLAY_NEW,
-                RESOURCELIB_DISPLAY_OPEN,
-                RESOURCELIB_DISPLAY_DOWNLOAD,
-                RESOURCELIB_DISPLAY_POPUP
+                syllabusLIB_DISPLAY_NEW,
+                syllabusLIB_DISPLAY_OPEN,
+                syllabusLIB_DISPLAY_DOWNLOAD,
+                syllabusLIB_DISPLAY_POPUP
         ];
 
         return in_array($display, $displaytypes);
