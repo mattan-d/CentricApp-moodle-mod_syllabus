@@ -71,10 +71,10 @@ class custom_completion extends activity_custom_completion {
         $display = $this->cm->customdata['display'] ?? null;
 
         $displaytypes = [
-                syllabusLIB_DISPLAY_NEW,
-                syllabusLIB_DISPLAY_OPEN,
-                syllabusLIB_DISPLAY_DOWNLOAD,
-                syllabusLIB_DISPLAY_POPUP
+                RESOURCELIB_DISPLAY_NEW,
+                RESOURCELIB_DISPLAY_OPEN,
+                RESOURCELIB_DISPLAY_DOWNLOAD,
+                RESOURCELIB_DISPLAY_POPUP
         ];
 
         return in_array($display, $displaytypes);

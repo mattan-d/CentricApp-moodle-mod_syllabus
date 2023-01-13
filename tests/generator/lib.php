@@ -48,13 +48,13 @@ class mod_syllabus_generator extends testing_module_generator {
      */
     public function create_instance($record = null, array $options = null) {
         global $CFG, $USER;
-        require_once($CFG->dirroot . '/lib/syllabuslib.php');
+        require_once($CFG->dirroot . '/lib/resourcelib.php');
         // Ensure the record can be modified without affecting calling code.
         $record = (object)(array)$record;
 
         // Fill in optional values if not specified.
         if (!isset($record->display)) {
-            $record->display = syllabusLIB_DISPLAY_AUTO;
+            $record->display = RESOURCELIB_DISPLAY_AUTO;
         }
         if (!isset($record->printintro)) {
             $record->printintro = 0;

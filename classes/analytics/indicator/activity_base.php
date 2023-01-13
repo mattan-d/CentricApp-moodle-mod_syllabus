@@ -33,7 +33,8 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright 2017 onwards Ankit Agarwal <ankit.agrr@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-abstract class activity_base extends \core_analytics\local\indicator\community_of_inquiry_activity {
+abstract class activity_base extends \core_analytics\local\indicator\community_of_inquiry_activity
+{
 
     /**
      * No need to fetch grades for syllabuss.
@@ -41,6 +42,7 @@ abstract class activity_base extends \core_analytics\local\indicator\community_o
      * @param \core_analytics\course $course
      * @return void
      */
-    public function fetch_student_grades(\core_analytics\course $course) {
+    public function fetch_student_grades(\core_analytics\course $course)
+    {
     }
 }

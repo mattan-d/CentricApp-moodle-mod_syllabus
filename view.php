@@ -76,7 +76,7 @@ if (count($files) < 1) {
 
 $syllabus->mainfile = $file->get_filename();
 $displaytype = syllabus_get_final_display_type($syllabus);
-if ($displaytype == syllabusLIB_DISPLAY_OPEN || $displaytype == syllabusLIB_DISPLAY_DOWNLOAD) {
+if ($displaytype == RESOURCELIB_DISPLAY_OPEN || $displaytype == RESOURCELIB_DISPLAY_DOWNLOAD) {
     $redirect = true;
 }
 
@@ -91,15 +91,15 @@ if ($redirect && !$forceview) {
     // coming from course page or url index page
     // this redirect trick solves caching problems when tracking views ;-)
     $path = '/'.$context->id.'/mod_syllabus/content/'.$syllabus->revision.$file->get_filepath().$file->get_filename();
-    $fullurl = moodle_url::make_file_url('/pluginfile.php', $path, $displaytype == syllabusLIB_DISPLAY_DOWNLOAD);
+    $fullurl = moodle_url::make_file_url('/pluginfile.php', $path, $displaytype == RESOURCELIB_DISPLAY_DOWNLOAD);
     redirect($fullurl);
 }
 
 switch ($displaytype) {
-    case syllabusLIB_DISPLAY_EMBED:
+    case RESOURCELIB_DISPLAY_EMBED:
         syllabus_display_embed($syllabus, $cm, $course, $file);
         break;
-    case syllabusLIB_DISPLAY_FRAME:
+    case RESOURCELIB_DISPLAY_FRAME:
         syllabus_display_frame($syllabus, $cm, $course, $file);
         break;
     default:

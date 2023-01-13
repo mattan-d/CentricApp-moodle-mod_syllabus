@@ -26,21 +26,21 @@
 defined('MOODLE_INTERNAL') || die;
 
 if ($ADMIN->fulltree) {
-    require_once("$CFG->libdir/syllabuslib.php");
+    require_once("$CFG->libdir/resourcelib.php");
 
-    $displayoptions = syllabuslib_get_displayoptions(array(syllabusLIB_DISPLAY_AUTO,
-        syllabusLIB_DISPLAY_EMBED,
-        syllabusLIB_DISPLAY_FRAME,
-        syllabusLIB_DISPLAY_DOWNLOAD,
-        syllabusLIB_DISPLAY_OPEN,
-        syllabusLIB_DISPLAY_NEW,
-        syllabusLIB_DISPLAY_POPUP,
+    $displayoptions = resourcelib_get_displayoptions(array(RESOURCELIB_DISPLAY_AUTO,
+        RESOURCELIB_DISPLAY_EMBED,
+        RESOURCELIB_DISPLAY_FRAME,
+        RESOURCELIB_DISPLAY_DOWNLOAD,
+        RESOURCELIB_DISPLAY_OPEN,
+        RESOURCELIB_DISPLAY_NEW,
+        RESOURCELIB_DISPLAY_POPUP,
     ));
-    $defaultdisplayoptions = array(syllabusLIB_DISPLAY_AUTO,
-        syllabusLIB_DISPLAY_EMBED,
-        syllabusLIB_DISPLAY_DOWNLOAD,
-        syllabusLIB_DISPLAY_OPEN,
-        syllabusLIB_DISPLAY_POPUP,
+    $defaultdisplayoptions = array(RESOURCELIB_DISPLAY_AUTO,
+        RESOURCELIB_DISPLAY_EMBED,
+        RESOURCELIB_DISPLAY_DOWNLOAD,
+        RESOURCELIB_DISPLAY_OPEN,
+        RESOURCELIB_DISPLAY_POPUP,
     );
 
     //--- general settings -----------------------------------------------------------------------------------
@@ -56,7 +56,7 @@ if ($ADMIN->fulltree) {
     $settings->add(new admin_setting_configcheckbox('syllabus/printintro',
         get_string('printintro', 'syllabus'), get_string('printintroexplain', 'syllabus'), 1));
     $settings->add(new admin_setting_configselect('syllabus/display',
-        get_string('displayselect', 'syllabus'), get_string('displayselectexplain', 'syllabus'), syllabusLIB_DISPLAY_AUTO,
+        get_string('displayselect', 'syllabus'), get_string('displayselectexplain', 'syllabus'), RESOURCELIB_DISPLAY_AUTO,
         $displayoptions));
     $settings->add(new admin_setting_configcheckbox('syllabus/showsize',
         get_string('showsize', 'syllabus'), get_string('showsize_desc', 'syllabus'), 0));

@@ -76,7 +76,7 @@ class moodle1_mod_syllabus_handler extends moodle1_mod_handler {
      */
     public function process_syllabus(array $data, array $raw) {
         global $CFG;
-        require_once("$CFG->libdir/syllabuslib.php");
+        require_once("$CFG->libdir/resourcelib.php");
 
         // replay the upgrade step 2009042001
         if ($CFG->texteditors !== 'textarea') {
@@ -139,7 +139,7 @@ class moodle1_mod_syllabus_handler extends moodle1_mod_handler {
         $syllabus['intro']           = $data['intro'];
         $syllabus['introformat']     = $data['introformat'];
         $syllabus['tobemigrated']    = 0;
-        $syllabus['legacyfiles']     = syllabusLIB_LEGACYFILES_ACTIVE;
+        $syllabus['legacyfiles']     = RESOURCELIB_LEGACYFILES_ACTIVE;
         $syllabus['legacyfileslast'] = null;
         $syllabus['filterfiles']     = 0;
         $syllabus['revision']        = 1;
@@ -148,16 +148,16 @@ class moodle1_mod_syllabus_handler extends moodle1_mod_handler {
         // populate display and displayoptions fields
         $options = array('printintro' => 1);
         if ($data['options'] == 'frame') {
-            $syllabus['display'] = syllabusLIB_DISPLAY_FRAME;
+            $syllabus['display'] = RESOURCELIB_DISPLAY_FRAME;
 
         } else if ($data['options'] == 'objectframe') {
-            $syllabus['display'] = syllabusLIB_DISPLAY_EMBED;
+            $syllabus['display'] = RESOURCELIB_DISPLAY_EMBED;
 
         } else if ($data['options'] == 'forcedownload') {
-            $syllabus['display'] = syllabusLIB_DISPLAY_DOWNLOAD;
+            $syllabus['display'] = RESOURCELIB_DISPLAY_DOWNLOAD;
 
         } else if ($data['popup']) {
-            $syllabus['display'] = syllabusLIB_DISPLAY_POPUP;
+            $syllabus['display'] = RESOURCELIB_DISPLAY_POPUP;
             $rawoptions = explode(',', $data['popup']);
             foreach ($rawoptions as $rawoption) {
                 list($name, $value) = explode('=', trim($rawoption), 2);
@@ -168,7 +168,7 @@ class moodle1_mod_syllabus_handler extends moodle1_mod_handler {
             }
 
         } else {
-            $syllabus['display'] = syllabusLIB_DISPLAY_AUTO;
+            $syllabus['display'] = RESOURCELIB_DISPLAY_AUTO;
         }
         $syllabus['displayoptions'] = serialize($options);
 

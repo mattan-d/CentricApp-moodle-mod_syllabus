@@ -31,7 +31,8 @@ require_once($CFG->dirroot . '/mod/syllabus/backup/moodle2/backup_syllabus_steps
 /**
  * Provides the steps to perform one complete backup of the syllabus instance
  */
-class backup_syllabus_activity_task extends backup_activity_task {
+class backup_syllabus_activity_task extends backup_activity_task
+{
 
     /**
      * @param bool $syllabusoldexists True if there are records in the syllabus_old table.
@@ -41,13 +42,15 @@ class backup_syllabus_activity_task extends backup_activity_task {
     /**
      * No specific settings for this activity
      */
-    protected function define_my_settings() {
+    protected function define_my_settings()
+    {
     }
 
     /**
      * Defines a backup step to store the instance data in the syllabus.xml file
      */
-    protected function define_my_steps() {
+    protected function define_my_steps()
+    {
         $this->add_step(new backup_syllabus_activity_structure_step('syllabus_structure', 'syllabus.xml'));
     }
 
@@ -57,19 +60,20 @@ class backup_syllabus_activity_task extends backup_activity_task {
      * @param string $content some HTML text that eventually contains URLs to the activity instance scripts
      * @return string the content with the URLs encoded
      */
-    static public function encode_content_links($content) {
+    static public function encode_content_links($content)
+    {
         global $CFG, $DB;
 
-        $base = preg_quote($CFG->wwwroot,"/");
+        $base = preg_quote($CFG->wwwroot, "/");
 
         // Link to the list of syllabuss.
-        $search="/(".$base."\/mod\/syllabus\/index.php\?id\=)([0-9]+)/";
-        $content= preg_replace($search, '$@syllabusINDEX*$2@$', $content);
+        $search = "/(" . $base . "\/mod\/syllabus\/index.php\?id\=)([0-9]+)/";
+        $content = preg_replace($search, '$@syllabusINDEX*$2@$', $content);
 
         // Link to syllabus view by moduleid.
-        $search = "/(".$base."\/mod\/syllabus\/view.php\?id\=)([0-9]+)/";
+        $search = "/(" . $base . "\/mod\/syllabus\/view.php\?id\=)([0-9]+)/";
         // Link to syllabus view by recordid
-        $search2 = "/(".$base."\/mod\/syllabus\/view.php\?r\=)([0-9]+)/";
+        $search2 = "/(" . $base . "\/mod\/syllabus\/view.php\?r\=)([0-9]+)/";
 
         // Check whether there are contents in the syllabus old table.
         if (static::$syllabusoldexists === null) {
@@ -94,7 +98,7 @@ class backup_syllabus_activity_task extends backup_activity_task {
                         $replace = '$@' . strtoupper($oldrecs[$cmid]->newmodule) . 'VIEWBYID*' . $cmid . '@$';
                     } else {
                         // Not in the syllabus old table, don't rewrite
-                        $replace = '$@syllabusVIEWBYID*'.$cmid.'@$';
+                        $replace = '$@syllabusVIEWBYID*' . $cmid . '@$';
                     }
                     $content = str_replace($matches[0][$i], $replace, $content);
                 }

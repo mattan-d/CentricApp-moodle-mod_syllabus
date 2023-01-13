@@ -26,7 +26,7 @@
 defined('MOODLE_INTERNAL') || die;
 
 require_once("$CFG->libdir/filelib.php");
-require_once("$CFG->libdir/syllabuslib.php");
+require_once("$CFG->libdir/resourcelib.php");
 require_once("$CFG->dirroot/mod/syllabus/lib.php");
 
 /**
@@ -72,7 +72,7 @@ function syllabus_display_embed($syllabus, $cm, $course, $file) {
     $mimetype = $file->get_mimetype();
     $title    = $syllabus->name;
 
-    $extension = syllabuslib_get_extension($file->get_filename());
+    $extension = RESOURCELIB_get_extension($file->get_filename());
 
     $mediamanager = core_media_manager::instance($PAGE);
     $embedoptions = array(
@@ -81,11 +81,11 @@ function syllabus_display_embed($syllabus, $cm, $course, $file) {
     );
 
     if (file_mimetype_in_typegroup($mimetype, 'web_image')) {  // It's an image
-        $code = syllabuslib_embed_image($moodleurl->out(), $title);
+        $code = RESOURCELIB_embed_image($moodleurl->out(), $title);
 
     } else if ($mimetype === 'application/pdf') {
         // PDF document
-        $code = syllabuslib_embed_pdf($moodleurl->out(), $title, $clicktoopen);
+        $code = RESOURCELIB_embed_pdf($moodleurl->out(), $title, $clicktoopen);
 
     } else if ($mediamanager->can_embed_url($moodleurl, $embedoptions)) {
         // Media (audio/video) file.
@@ -96,7 +96,7 @@ function syllabus_display_embed($syllabus, $cm, $course, $file) {
         $moodleurl->param('embed', 1);
 
         // anything else - just try object tag enlarged as much as possible
-        $code = syllabuslib_embed_general($moodleurl, $title, $clicktoopen, $mimetype);
+        $code = RESOURCELIB_embed_general($moodleurl, $title, $clicktoopen, $mimetype);
     }
 
     // Let the module handle the display.
@@ -211,7 +211,7 @@ function syllabus_print_workaround($syllabus, $cm, $course, $file) {
     $syllabus->mainfile = $file->get_filename();
     echo '<div class="syllabusworkaround">';
     switch (syllabus_get_final_display_type($syllabus)) {
-        case syllabusLIB_DISPLAY_POPUP:
+        case RESOURCELIB_DISPLAY_POPUP:
             $path = '/'.$file->get_contextid().'/mod_syllabus/content/'.$syllabus->revision.$file->get_filepath().$file->get_filename();
             $fullurl = file_encode_url($CFG->wwwroot.'/pluginfile.php', $path, false);
             $options = empty($syllabus->displayoptions) ? [] : (array) unserialize_array($syllabus->displayoptions);
@@ -222,16 +222,16 @@ function syllabus_print_workaround($syllabus, $cm, $course, $file) {
             echo syllabus_get_clicktoopen($file, $syllabus->revision, $extra);
             break;
 
-        case syllabusLIB_DISPLAY_NEW:
+        case RESOURCELIB_DISPLAY_NEW:
             $extra = 'onclick="this.target=\'_blank\'"';
             echo syllabus_get_clicktoopen($file, $syllabus->revision, $extra);
             break;
 
-        case syllabusLIB_DISPLAY_DOWNLOAD:
+        case RESOURCELIB_DISPLAY_DOWNLOAD:
             echo syllabus_get_clicktodownload($file, $syllabus->revision);
             break;
 
-        case syllabusLIB_DISPLAY_OPEN:
+        case RESOURCELIB_DISPLAY_OPEN:
         default:
             echo syllabus_get_clicktoopen($file, $syllabus->revision);
             break;
@@ -463,25 +463,25 @@ function syllabus_print_filenotfound($syllabus, $cm, $course) {
 function syllabus_get_final_display_type($syllabus) {
     global $CFG, $PAGE;
 
-    if ($syllabus->display != syllabusLIB_DISPLAY_AUTO) {
+    if ($syllabus->display != RESOURCELIB_DISPLAY_AUTO) {
         return $syllabus->display;
     }
 
     if (empty($syllabus->mainfile)) {
-        return syllabusLIB_DISPLAY_DOWNLOAD;
+        return RESOURCELIB_DISPLAY_DOWNLOAD;
     } else {
         $mimetype = mimeinfo('type', $syllabus->mainfile);
     }
 
     if (file_mimetype_in_typegroup($mimetype, 'archive')) {
-        return syllabusLIB_DISPLAY_DOWNLOAD;
+        return RESOURCELIB_DISPLAY_DOWNLOAD;
     }
     if (file_mimetype_in_typegroup($mimetype, array('web_image', '.htm', 'web_video', 'web_audio'))) {
-        return syllabusLIB_DISPLAY_EMBED;
+        return RESOURCELIB_DISPLAY_EMBED;
     }
 
     // let the browser deal with it somehow
-    return syllabusLIB_DISPLAY_OPEN;
+    return RESOURCELIB_DISPLAY_OPEN;
 }
 
 /**
@@ -511,7 +511,7 @@ function syllabus_set_mainfile($data) {
     $context = context_module::instance($cmid);
     if ($draftitemid) {
         $options = array('subdirs' => true, 'embed' => false);
-        if ($data->display == syllabusLIB_DISPLAY_EMBED) {
+        if ($data->display == RESOURCELIB_DISPLAY_EMBED) {
             $options['embed'] = true;
         }
         file_save_draft_area_files($draftitemid, $context->id, 'mod_syllabus', 'content', 0, $options);

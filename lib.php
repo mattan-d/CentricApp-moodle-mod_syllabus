@@ -94,7 +94,7 @@ function syllabus_get_post_actions() {
  */
 function syllabus_add_instance($data, $mform) {
     global $CFG, $DB;
-    require_once("$CFG->libdir/syllabuslib.php");
+    require_once("$CFG->libdir/resourcelib.php");
     require_once("$CFG->dirroot/mod/syllabus/locallib.php");
     $cmid = $data->coursemodule;
     $data->timemodified = time();
@@ -121,7 +121,7 @@ function syllabus_add_instance($data, $mform) {
  */
 function syllabus_update_instance($data, $mform) {
     global $CFG, $DB;
-    require_once("$CFG->libdir/syllabuslib.php");
+    require_once("$CFG->libdir/resourcelib.php");
     $data->timemodified = time();
     $data->id           = $data->instance;
     $data->revision++;
@@ -146,11 +146,11 @@ function syllabus_update_instance($data, $mform) {
  */
 function syllabus_set_display_options($data) {
     $displayoptions = array();
-    if ($data->display == syllabusLIB_DISPLAY_POPUP) {
+    if ($data->display == RESOURCELIB_DISPLAY_POPUP) {
         $displayoptions['popupwidth']  = $data->popupwidth;
         $displayoptions['popupheight'] = $data->popupheight;
     }
-    if (in_array($data->display, array(syllabusLIB_DISPLAY_AUTO, syllabusLIB_DISPLAY_EMBED, syllabusLIB_DISPLAY_FRAME))) {
+    if (in_array($data->display, array(RESOURCELIB_DISPLAY_AUTO, RESOURCELIB_DISPLAY_EMBED, RESOURCELIB_DISPLAY_FRAME))) {
         $displayoptions['printintro']   = (int)!empty($data->printintro);
     }
     if (!empty($data->showsize)) {
@@ -231,7 +231,7 @@ function syllabus_get_coursemodule_info($coursemodule) {
 
     $display = syllabus_get_final_display_type($syllabus);
 
-    if ($display == syllabusLIB_DISPLAY_POPUP) {
+    if ($display == RESOURCELIB_DISPLAY_POPUP) {
         $fullurl = "$CFG->wwwroot/mod/syllabus/view.php?id=$coursemodule->id&amp;redirect=1";
         $options = empty($syllabus->displayoptions) ? [] : (array) unserialize_array($syllabus->displayoptions);
         $width  = empty($options['popupwidth'])  ? 620 : $options['popupwidth'];
@@ -239,7 +239,7 @@ function syllabus_get_coursemodule_info($coursemodule) {
         $wh = "width=$width,height=$height,toolbar=no,location=no,menubar=no,copyhistory=no,status=no,directories=no,scrollbars=yes,resizable=yes";
         $info->onclick = "window.open('$fullurl', '', '$wh'); return false;";
 
-    } else if ($display == syllabusLIB_DISPLAY_NEW) {
+    } else if ($display == RESOURCELIB_DISPLAY_NEW) {
         $fullurl = "$CFG->wwwroot/mod/syllabus/view.php?id=$coursemodule->id&amp;redirect=1";
         $info->onclick = "window.open('$fullurl'); return false;";
 
@@ -358,7 +358,7 @@ function syllabus_get_file_info($browser, $areas, $course, $cm, $context, $filea
  */
 function syllabus_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options=array()) {
     global $CFG, $DB;
-    require_once("$CFG->libdir/syllabuslib.php");
+    require_once("$CFG->libdir/resourcelib.php");
 
     if ($context->contextlevel != CONTEXT_MODULE) {
         return false;
@@ -393,10 +393,10 @@ function syllabus_pluginfile($course, $cm, $context, $filearea, $args, $forcedow
                 }
             }
             $syllabus = $DB->get_record('syllabus', array('id'=>$cm->instance), 'id, legacyfiles', MUST_EXIST);
-            if ($syllabus->legacyfiles != syllabusLIB_LEGACYFILES_ACTIVE) {
+            if ($syllabus->legacyfiles != RESOURCELIB_LEGACYFILES_ACTIVE) {
                 return false;
             }
-            if (!$file = syllabuslib_try_file_migration('/'.$relativepath, $cm->id, $cm->course, 'mod_syllabus', 'content', 0)) {
+            if (!$file = RESOURCELIB_try_file_migration('/'.$relativepath, $cm->id, $cm->course, 'mod_syllabus', 'content', 0)) {
                 return false;
             }
             // file migrate - update flag

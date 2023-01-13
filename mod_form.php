@@ -69,9 +69,9 @@ class mod_syllabus_mod_form extends moodleform_mod {
         $mform->addElement('filemanager', 'files', get_string('selectfiles'), null, $filemanager_options);
 
         // add legacy files flag only if used
-        if (isset($this->current->legacyfiles) and $this->current->legacyfiles != syllabusLIB_LEGACYFILES_NO) {
-            $options = array(syllabusLIB_LEGACYFILES_DONE   => get_string('legacyfilesdone', 'syllabus'),
-                             syllabusLIB_LEGACYFILES_ACTIVE => get_string('legacyfilesactive', 'syllabus'));
+        if (isset($this->current->legacyfiles) and $this->current->legacyfiles != RESOURCELIB_LEGACYFILES_NO) {
+            $options = array(RESOURCELIB_LEGACYFILES_DONE   => get_string('legacyfilesdone', 'syllabus'),
+                             RESOURCELIB_LEGACYFILES_ACTIVE => get_string('legacyfilesactive', 'syllabus'));
             $mform->addElement('select', 'legacyfiles', get_string('legacyfiles', 'syllabus'), $options);
         }
 
@@ -79,9 +79,9 @@ class mod_syllabus_mod_form extends moodleform_mod {
         $mform->addElement('header', 'optionssection', get_string('appearance'));
 
         if ($this->current->instance) {
-            $options = syllabuslib_get_displayoptions(explode(',', $config->displayoptions), $this->current->display);
+            $options = resourcelib_get_displayoptions(explode(',', $config->displayoptions), $this->current->display);
         } else {
-            $options = syllabuslib_get_displayoptions(explode(',', $config->displayoptions));
+            $options = resourcelib_get_displayoptions(explode(',', $config->displayoptions));
         }
 
         if (count($options) == 1) {
@@ -105,10 +105,10 @@ class mod_syllabus_mod_form extends moodleform_mod {
         $mform->setDefault('showdate', $config->showdate);
         $mform->addHelpButton('showdate', 'showdate', 'syllabus');
 
-        if (array_key_exists(syllabusLIB_DISPLAY_POPUP, $options)) {
+        if (array_key_exists(RESOURCELIB_DISPLAY_POPUP, $options)) {
             $mform->addElement('text', 'popupwidth', get_string('popupwidth', 'syllabus'), array('size'=>3));
             if (count($options) > 1) {
-                $mform->hideIf('popupwidth', 'display', 'noteq', syllabusLIB_DISPLAY_POPUP);
+                $mform->hideIf('popupwidth', 'display', 'noteq', RESOURCELIB_DISPLAY_POPUP);
             }
             $mform->setType('popupwidth', PARAM_INT);
             $mform->setDefault('popupwidth', $config->popupwidth);
@@ -116,21 +116,21 @@ class mod_syllabus_mod_form extends moodleform_mod {
 
             $mform->addElement('text', 'popupheight', get_string('popupheight', 'syllabus'), array('size'=>3));
             if (count($options) > 1) {
-                $mform->hideIf('popupheight', 'display', 'noteq', syllabusLIB_DISPLAY_POPUP);
+                $mform->hideIf('popupheight', 'display', 'noteq', RESOURCELIB_DISPLAY_POPUP);
             }
             $mform->setType('popupheight', PARAM_INT);
             $mform->setDefault('popupheight', $config->popupheight);
             $mform->setAdvanced('popupheight', true);
         }
 
-        if (array_key_exists(syllabusLIB_DISPLAY_AUTO, $options) or
-          array_key_exists(syllabusLIB_DISPLAY_EMBED, $options) or
-          array_key_exists(syllabusLIB_DISPLAY_FRAME, $options)) {
+        if (array_key_exists(RESOURCELIB_DISPLAY_AUTO, $options) or
+          array_key_exists(RESOURCELIB_DISPLAY_EMBED, $options) or
+          array_key_exists(RESOURCELIB_DISPLAY_FRAME, $options)) {
             $mform->addElement('checkbox', 'printintro', get_string('printintro', 'syllabus'));
-            $mform->hideIf('printintro', 'display', 'eq', syllabusLIB_DISPLAY_POPUP);
-            $mform->hideIf('printintro', 'display', 'eq', syllabusLIB_DISPLAY_DOWNLOAD);
-            $mform->hideIf('printintro', 'display', 'eq', syllabusLIB_DISPLAY_OPEN);
-            $mform->hideIf('printintro', 'display', 'eq', syllabusLIB_DISPLAY_NEW);
+            $mform->hideIf('printintro', 'display', 'eq', RESOURCELIB_DISPLAY_POPUP);
+            $mform->hideIf('printintro', 'display', 'eq', RESOURCELIB_DISPLAY_DOWNLOAD);
+            $mform->hideIf('printintro', 'display', 'eq', RESOURCELIB_DISPLAY_OPEN);
+            $mform->hideIf('printintro', 'display', 'eq', RESOURCELIB_DISPLAY_NEW);
             $mform->setDefault('printintro', $config->printintro);
         }
 
