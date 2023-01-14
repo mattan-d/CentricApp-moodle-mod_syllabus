@@ -26,11 +26,6 @@
 require_once(__DIR__ . '/../../config.php');
 require_once($CFG->libdir . '/adminlib.php');
 
-require_capability('mod/syllabus:view', context_system::instance());
-
-
-opcache_reset();
-
 admin_externalpage_setup('mod_syllabus');
 
 $syllabus = $DB->get_records('syllabus');
@@ -53,7 +48,7 @@ $output = $PAGE->get_renderer('mod_syllabus');
 echo $output->header();
 echo $output->heading($pagetitle);
 
-$renderable = new \mod_syllabus\output\index_page($syllabus);
+$renderable = new \mod_syllabus\output\report_page($syllabus);
 
 echo $output->render($renderable);
 echo $output->footer();
