@@ -26,9 +26,12 @@
 require_once(__DIR__ . '/../../config.php');
 require_once($CFG->libdir . '/adminlib.php');
 
-admin_externalpage_setup('reportinsights');
+require_capability('mod/syllabus:view', context_system::instance());
+
 
 opcache_reset();
+
+admin_externalpage_setup('mod_syllabus');
 
 $syllabus = $DB->get_records('syllabus');
 
@@ -36,10 +39,11 @@ $syllabus = $DB->get_records('syllabus');
 $title = get_string('report', 'mod_syllabus');
 $pagetitle = $title;
 $url = new moodle_url('/mod/syllabus/report.php');
+$PAGE->set_context(context_system::instance());
 $PAGE->set_url($url);
 $PAGE->set_title($title);
 $PAGE->set_heading($title);
-opcache_reset();
+
 
 // $PAGE->requires->js_call_amd('mod/syllabus/manage', 'init');
 // $PAGE->requires->css('mod/syllabus/styles/select2.css');
@@ -49,7 +53,7 @@ $output = $PAGE->get_renderer('mod_syllabus');
 echo $output->header();
 echo $output->heading($pagetitle);
 
-$renderable = new \mod_syllabus\output\index_page('Some text');
+$renderable = new \mod_syllabus\output\index_page($syllabus);
 
 echo $output->render($renderable);
 echo $output->footer();

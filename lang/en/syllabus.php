@@ -128,3 +128,5 @@ If there are multiple files in this syllabus, the start Syllabustype is displaye
 
 If the Syllabustype is not known to the system, it will not display.';
 $string['uploadeddate'] = 'Uploaded {$a}';
+$string['reports'] = 'Syllabus Reports';
+

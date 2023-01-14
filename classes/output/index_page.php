@@ -12,9 +12,9 @@ class index_page implements renderable, templatable
     /** @var string $sometext Some text to show how to pass data to a template. */
     var $sometext = null;
 
-    public function __construct($sometext)
+    public function __construct($data)
     {
-        $this->sometext = $sometext;
+        $this->results = $data;
     }
 
     /**
@@ -25,7 +25,11 @@ class index_page implements renderable, templatable
     public function export_for_template(renderer_base $output)
     {
         $data = new stdClass();
-        $data->sometext = $this->sometext;
+        $data->rows = [];
+        foreach ($this->results as $row) {
+            $data->rows[] = $row;
+        }
+
         return $data;
     }
 }
