@@ -28,8 +28,6 @@ require_once($CFG->libdir . '/adminlib.php');
 
 admin_externalpage_setup('mod_syllabus');
 
-$syllabus = $DB->get_records('syllabus');
-
 // Set up the page.
 $title = get_string('report', 'mod_syllabus');
 $pagetitle = $title;
@@ -39,6 +37,7 @@ $PAGE->set_url($url);
 $PAGE->set_title($title);
 $PAGE->set_heading($title);
 
+opcache_reset();
 
 // $PAGE->requires->js_call_amd('mod/syllabus/manage', 'init');
 // $PAGE->requires->css('mod/syllabus/styles/select2.css');
@@ -48,7 +47,33 @@ $output = $PAGE->get_renderer('mod_syllabus');
 echo $output->header();
 echo $output->heading($pagetitle);
 
-$renderable = new \mod_syllabus\output\report_page($syllabus);
 
-echo $output->render($renderable);
+$syllabus = $DB->get_records('syllabus');
+
+$table = new html_table();
+$table->head = array();
+$table->colclasses = array();
+$table->head[] = 'Test1';
+$table->head[] = 'Test2';
+$table->head[] = 'Test3';
+$table->colclasses[] = 'centeralign';
+$table->head[] = "";
+$table->colclasses[] = 'centeralign';
+$table->id = "users";
+
+
+foreach ($syllabus as $item) {
+    $row = array();
+    $row[] = $item->name;
+    $row[] = $item->course;
+    $table->data[] = $row;
+}
+
+echo html_writer::start_tag('div', array('class' => 'no-overflow'));
+echo html_writer::table($table);
+echo html_writer::end_tag('div');
+
+//$renderable = new \mod_syllabus\output\report_page($syllabus);
+
+// echo $output->render($renderable);
 echo $output->footer();
