@@ -28,16 +28,11 @@ require_once($CFG->libdir . '/adminlib.php');
 
 admin_externalpage_setup('mod_syllabus');
 
-// Set up the page.
-$title = get_string('report', 'mod_syllabus');
-$pagetitle = $title;
 $url = new moodle_url('/mod/syllabus/report.php');
-$PAGE->set_context(context_system::instance());
+// $PAGE->set_context(context_system::instance());
 $PAGE->set_url($url);
-$PAGE->set_title($title);
-$PAGE->set_heading($title);
-
-opcache_reset();
+$PAGE->set_title(get_string('reports'));
+$PAGE->set_heading(get_string('reports'));
 
 // $PAGE->requires->js_call_amd('mod/syllabus/manage', 'init');
 // $PAGE->requires->css('mod/syllabus/styles/select2.css');
@@ -45,27 +40,35 @@ opcache_reset();
 $output = $PAGE->get_renderer('mod_syllabus');
 
 echo $output->header();
-echo $output->heading($pagetitle);
+echo $output->heading(get_string('reports'));
 
-
-$syllabus = $DB->get_records('syllabus');
+$syllabus = $DB->get_records_sql('SELECT 
+                                            c.id, cc.name AS category, c.fullname AS course
+                                        FROM
+                                            {course} c,
+                                            {course_categories} cc
+                                        WHERE
+                                            c.category = cc.id
+                                                AND c.id NOT IN (SELECT 
+                                                    course
+                                                FROM
+                                                    {syllabus}
+                                                GROUP BY id)');
 
 $table = new html_table();
 $table->head = array();
 $table->colclasses = array();
-$table->head[] = 'Test1';
-$table->head[] = 'Test2';
-$table->head[] = 'Test3';
-$table->colclasses[] = 'centeralign';
-$table->head[] = "";
-$table->colclasses[] = 'centeralign';
-$table->id = "users";
+$table->head[] = 'Course Name';
+$table->head[] = 'Course ID';
+$table->head[] = 'Category';
+$table->id = 'syllabusreport';
 
 
 foreach ($syllabus as $item) {
     $row = array();
-    $row[] = $item->name;
-    $row[] = $item->course;
+    $row[] = '<a href="' . $CFG->wwwroot . '/course/view.php?id=' . $item->id . '">' . $item->course . '</a>';
+    $row[] = $item->id;
+    $row[] = $item->category;
     $table->data[] = $row;
 }
 
