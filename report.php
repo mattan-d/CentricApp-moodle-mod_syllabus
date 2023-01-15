@@ -31,8 +31,8 @@ admin_externalpage_setup('mod_syllabus');
 $url = new moodle_url('/mod/syllabus/report.php');
 // $PAGE->set_context(context_system::instance());
 $PAGE->set_url($url);
-$PAGE->set_title(get_string('reports'));
-$PAGE->set_heading(get_string('reports'));
+$PAGE->set_title(get_string('reports', 'mod_syllabus'));
+$PAGE->set_heading(get_string('reports', 'mod_syllabus'));
 
 // $PAGE->requires->js_call_amd('mod/syllabus/manage', 'init');
 // $PAGE->requires->css('mod/syllabus/styles/select2.css');
@@ -40,7 +40,7 @@ $PAGE->set_heading(get_string('reports'));
 $output = $PAGE->get_renderer('mod_syllabus');
 
 echo $output->header();
-echo $output->heading(get_string('reports'));
+echo $output->heading(get_string('courses_wo', 'mod_syllabus'));
 
 $syllabus = $DB->get_records_sql('SELECT 
                                             c.id, cc.name AS category, c.fullname AS course
