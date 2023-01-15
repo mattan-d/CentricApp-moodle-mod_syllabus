@@ -45,12 +45,13 @@ if ($ADMIN->fulltree) {
 
     if ($hassiteconfig) {
         $ADMIN->add('root', new admin_category('centricapp', 'CentricApp'));
+        $ADMIN->add('centricapp', new admin_category('syllabus', 'Syllabus'));
 
-        $settings = new admin_settingpage('modsettingsyllabus', new lang_string('pluginname', 'mod_syllabus'), 'mod/syllabus:view');
-        $ADMIN->add('centricapp', $settings);
+        $settings = new admin_settingpage('modsettingsyllabus', 'Settings', 'mod/syllabus:view');
+        $ADMIN->add('syllabus', $settings);
 
         $page = new admin_externalpage('mod_syllabus', get_string('reports', 'mod_syllabus'), new moodle_url('/mod/syllabus/report.php'), 'mod/syllabus:view');
-        $ADMIN->add('centricapp', $page);
+        $ADMIN->add('syllabus', $page);
     }
 
     //--- general settings -----------------------------------------------------------------------------------
