@@ -25,6 +25,17 @@
 
 defined('MOODLE_INTERNAL') || die;
 
+if ($hassiteconfig) {
+    $ADMIN->add('root', new admin_category('centricapp', 'CentricApp'));
+    $ADMIN->add('centricapp', new admin_category('syllabus', 'Syllabus'));
+
+    $settings = new admin_settingpage('modsettingsyllabus', 'Settings', 'mod/syllabus:view');
+    $ADMIN->add('syllabus', $settings);
+
+    $page = new admin_externalpage('mod_syllabus', get_string('reports', 'mod_syllabus'), new moodle_url('/mod/syllabus/report.php'), 'mod/syllabus:view');
+    $ADMIN->add('syllabus', $page);
+}
+
 if ($ADMIN->fulltree) {
     require_once("$CFG->libdir/resourcelib.php");
 
@@ -42,17 +53,6 @@ if ($ADMIN->fulltree) {
         RESOURCELIB_DISPLAY_OPEN,
         RESOURCELIB_DISPLAY_POPUP,
     );
-
-    if ($hassiteconfig) {
-        $ADMIN->add('root', new admin_category('centricapp', 'CentricApp'));
-        $ADMIN->add('centricapp', new admin_category('syllabus', 'Syllabus'));
-
-        $settings = new admin_settingpage('modsettingsyllabus', 'Settings', 'mod/syllabus:view');
-        $ADMIN->add('syllabus', $settings);
-
-        $page = new admin_externalpage('mod_syllabus', get_string('reports', 'mod_syllabus'), new moodle_url('/mod/syllabus/report.php'), 'mod/syllabus:view');
-        $ADMIN->add('syllabus', $page);
-    }
 
     //--- general settings -----------------------------------------------------------------------------------
     $settings->add(new admin_setting_configtext('syllabus/framesize',
