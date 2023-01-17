@@ -45,7 +45,10 @@ echo $output->header();
 echo $output->heading(get_string('reports', 'mod_syllabus'));
 
 $syllabus = $DB->get_records_sql('SELECT 
-                                            c.id, cc.name AS category, c.fullname AS course
+                                            c.id, cc.name AS category, c.fullname AS course,
+                                            FROM_UNIXTIME(c.timemodified) AS timemodified,
+                                            FROM_UNIXTIME(c.startdate) AS startdate,
+                                            FROM_UNIXTIME(c.enddate) AS enddate
                                         FROM
                                             {course} c,
                                             {course_categories} cc
@@ -61,14 +64,18 @@ $table = new html_table();
 $table->head = array();
 $table->colclasses = array();
 $table->head[] = 'Course Name';
-$table->head[] = 'Course ID';
+$table->head[] = 'Time Modified';
+$table->head[] = 'Start Date';
+$table->head[] = 'End Date';
 $table->head[] = 'Category';
 $table->id = 'syllabusreport';
 
 foreach ($syllabus as $item) {
     $row = array();
     $row[] = '<a href="' . $CFG->wwwroot . '/course/view.php?id=' . $item->id . '">' . $item->course . '</a>';
-    $row[] = $item->id;
+    $row[] = $item->timemodified;
+    $row[] = $item->startdate;
+    $row[] = $item->enddate;
     $row[] = $item->category;
     $table->data[] = $row;
 }
@@ -113,6 +120,7 @@ $completed = new \core\chart_series('With Syllabus', $data->completed);
 
 $chart = new \core\chart_bar();
 $chart->set_title(get_string('reports', 'mod_syllabus'));
+$chart->set_horizontal(true);
 $chart->add_series($courses);
 $chart->add_series($completed);
 $chart->add_series($empty);
