@@ -66,8 +66,8 @@ class restore_syllabus_activity_task extends restore_activity_task {
     static public function define_decode_rules() {
         $rules = array();
 
-        $rules[] = new restore_decode_rule('syllabusVIEWBYID', '/mod/syllabus/view.php?id=$1', 'course_module');
-        $rules[] = new restore_decode_rule('syllabusINDEX', '/mod/syllabus/index.php?id=$1', 'course');
+        $rules[] = new restore_decode_rule('SYLLABUSVIEWBYID', '/mod/syllabus/view.php?id=$1', 'course_module');
+        $rules[] = new restore_decode_rule('SYLLABUSINDEX', '/mod/syllabus/index.php?id=$1', 'course');
 
         return $rules;
 

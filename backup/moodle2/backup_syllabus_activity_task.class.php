@@ -68,7 +68,7 @@ class backup_syllabus_activity_task extends backup_activity_task
 
         // Link to the list of syllabuss.
         $search = "/(" . $base . "\/mod\/syllabus\/index.php\?id\=)([0-9]+)/";
-        $content = preg_replace($search, '$@syllabusINDEX*$2@$', $content);
+        $content = preg_replace($search, '$@SYLLABUSINDEX*$2@$', $content);
 
         // Link to syllabus view by moduleid.
         $search = "/(" . $base . "\/mod\/syllabus\/view.php\?id\=)([0-9]+)/";
@@ -98,7 +98,7 @@ class backup_syllabus_activity_task extends backup_activity_task
                         $replace = '$@' . strtoupper($oldrecs[$cmid]->newmodule) . 'VIEWBYID*' . $cmid . '@$';
                     } else {
                         // Not in the syllabus old table, don't rewrite
-                        $replace = '$@syllabusVIEWBYID*' . $cmid . '@$';
+                        $replace = '$@SYLLABUSVIEWBYID*' . $cmid . '@$';
                     }
                     $content = str_replace($matches[0][$i], $replace, $content);
                 }
@@ -124,7 +124,7 @@ class backup_syllabus_activity_task extends backup_activity_task
                 }
             }
         } else {
-            $content = preg_replace($search, '$@syllabusVIEWBYID*$2@$', $content);
+            $content = preg_replace($search, '$@SYLLABUSVIEWBYID*$2@$', $content);
         }
         return $content;
     }
