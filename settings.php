@@ -27,7 +27,7 @@ defined('MOODLE_INTERNAL') || die;
 
 if ($hassiteconfig) {
     $ADMIN->add('root', new admin_category('centricapp', 'CentricApp'));
-    $ADMIN->add('centricapp', new admin_category('syllabus', 'Syllabus'));
+    $ADMIN->add('centricapp', new admin_category('syllabus', get_string('pluginname', 'mod_syllabus')));
 
     $settings = new admin_settingpage('modsettingsyllabus', 'Settings', 'mod/syllabus:view');
     $ADMIN->add('syllabus', $settings);

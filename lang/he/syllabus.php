@@ -74,7 +74,7 @@ $string['legacyfiles'] = 'Migration of old course file';
 $string['legacyfilesactive'] = 'Active';
 $string['legacyfilesdone'] = 'Finished';
 $string['modifieddate'] = 'Modified {$a}';
-$string['modulename'] = 'Syllabus';
+$string['modulename'] = 'סילבוס';
 $string['modulename_help'] = 'The Syllabusmodule enables a teacher to provide a Syllabusas a course syllabus. Where possible, the Syllabuswill be displayed within the course interface; otherwise students will be prompted to download it. The Syllabusmay include supporting files, for example an HTML page may have embedded images.
 
 Note that students need to have the appropriate software on their computers in order to open the file.
@@ -85,12 +85,12 @@ A Syllabusmay be used
 * To include a mini website as a course syllabus
 * To provide draft files of software programs so students can edit and submit them for assessment';
 $string['modulename_link'] = 'mod/syllabus/view';
-$string['modulenameplural'] = 'Syllabus';
+$string['modulenameplural'] = 'סילבוס';
 $string['notmigrated'] = 'This legacy syllabus type ({$a}) was not yet migrated, sorry.';
 $string['optionsheader'] = 'Display options';
 $string['page-mod-syllabus-x'] = 'Any Syllabusmodule page';
 $string['pluginadministration'] = 'Syllabus module administration';
-$string['pluginname'] = 'Syllabus';
+$string['pluginname'] = 'סילבוס';
 $string['popupheight'] = 'Pop-up height (in pixels)';
 $string['popupheightexplain'] = 'Specifies default height of popup windows.';
 $string['popupsyllabus'] = 'This syllabus should appear in a popup window.';
@@ -108,7 +108,7 @@ $string['syllabusdetails_typedate'] = '{$a->type} {$a->date}';
 $string['syllabusdetails_sizetypedate'] = '{$a->size} {$a->type} {$a->date}';
 $string['syllabus:exportsyllabus'] = 'Export syllabus';
 $string['syllabus:view'] = 'View syllabus';
-$string['search:activity'] = 'Syllabus';
+$string['search:activity'] = 'סילבוס';
 $string['selectmainfile'] = 'Please select the main Syllabusby clicking the icon next to Syllabusname.';
 $string['showdate'] = 'Show upload/modified date';
 $string['showdate_desc'] = 'Display upload/modified date on course page?';
@@ -128,12 +128,12 @@ If there are multiple files in this syllabus, the start Syllabustype is displaye
 
 If the Syllabustype is not known to the system, it will not display.';
 $string['uploadeddate'] = 'Uploaded {$a}';
-$string['reports'] = 'Syllabus Report';
-$string['courseslist'] = 'Courses List';
-$string['type'] = 'Type';
-$string['links'] = 'Links';
-$string['owners'] = 'Onwers';
-$string['count'] = 'Count';
-$string['timemodified'] = 'Modified';
-$string['withsyllabus'] = 'W/S';
-$string['withoutsyllabus'] = 'W/O';
+$string['reports'] = 'דו״ח סילבוס';
+$string['courseslist'] = 'רשימת קורסים';
+$string['type'] = 'סוג';
+$string['links'] = 'קישורים';
+$string['owners'] = 'בעלים';
+$string['count'] = 'קבצים';
+$string['timemodified'] = 'תאריך שינוי';
+$string['withsyllabus'] = 'עם סילבוס';
+$string['withoutsyllabus'] = 'ללא סילבוס';

@@ -1,8 +1,95 @@
-<div class="hero-unit">
-    <h1>
-        {{#rows}}
-            id: {{{id}}}
-            name: {{{name}}}
-        {{/rows}}
-    </h1>
-</div>
+<h4>{{# str }} courseslist, mod_syllabus {{/ str }}</h4>
+<table class="table table-striped" id="syllabusreport">
+    <thead>
+    <tr>
+        <th scope="col">{{# str }} type, mod_syllabus {{/ str }}</th>
+        <th scope="col">{{# str }} course {{/ str }}</th>
+        <th scope="col">{{# str }} timemodified, mod_syllabus  {{/ str }}</th>
+        <th scope="col">{{# str }} startdate {{/ str }}</th>
+        <th scope="col">{{# str }} enddate {{/ str }}</th>
+        <th scope="col">{{# str }} category {{/ str }}</th>
+        <th scope="col">{{# str }} count, mod_syllabus {{/ str }}</th>
+        <th scope="col">{{# str }} owners, mod_syllabus {{/ str }}</th>
+        <th scope="col">{{# str }} links, mod_syllabus {{/ str }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#rows}}
+        <tr>
+            <th scope="row">{{{type}}}</th>
+            <td>{{{course}}}</td>
+            <td>{{{timemodified}}}</td>
+            <td>{{{startdate}}}</td>
+            <td>{{{enddate}}}</td>
+            <td>{{{category}}}</td>
+            <td>{{{count}}}</td>
+            <td>{{{owners}}}</td>
+            <td>{{{links}}}</td>
+        </tr>
+    {{/rows}}
+    </tbody>
+    <tfoot>
+    <tr>
+        <th>{{# str }} type, mod_syllabus {{/ str }}</th>
+        <th>{{# str }} course {{/ str }}</th>
+        <th>{{# str }} timemodified, mod_syllabus  {{/ str }}</th>
+        <th>{{# str }} startdate {{/ str }}</th>
+        <th>{{# str }} enddate {{/ str }}</th>
+        <th>{{# str }} category {{/ str }}</th>
+        <th>{{# str }} count, mod_syllabus {{/ str }}</th>
+        <th>{{# str }} owners, mod_syllabus {{/ str }}</th>
+        <th>{{# str }} links, mod_syllabus {{/ str }}</th>
+    </tr>
+    </tfoot>
+</table>
+
+
+<!-- DataTables code starts-->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.3.2/css/buttons.dataTables.min.css">
+
+<script type="text/javascript" language="javascript"
+        src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" language="javascript"
+        src="https://cdn.datatables.net/buttons/2.3.2/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" language="javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script type="text/javascript" language="javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script type="text/javascript" language="javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script type="text/javascript" language="javascript"
+        src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js"></script>
+<script type="text/javascript" language="javascript"
+        src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.print.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#syllabusreport').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            language: {
+                url: 'amd/i18n/he.json'
+            },
+            initComplete: function () {
+                this.api().columns([0, 5]).every(function () {
+                    var column = this;
+                    var select = $('<select><option value=""></option></select>')
+                            .appendTo($(column.footer()).empty())
+                            .on('change', function () {
+                                var val = $(this).val();//$.fn.dataTable.util.escapeRegex($(this).val());
+                                column.search(val ? '^' + val + '$' : '', true, false).draw();
+                            });
+
+                    column.data().unique().sort().each(function (d, j) {
+                        select.append('<option value="' + d + '">' + d + '</option>');
+                    });
+                });
+            },
+        });
+    });
+</script>
+<!-- DataTables code ends-->
