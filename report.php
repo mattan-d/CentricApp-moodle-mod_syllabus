@@ -39,6 +39,7 @@ $output = $PAGE->get_renderer('mod_syllabus');
 echo $output->header();
 echo $output->heading(get_string('reports', 'mod_syllabus'));
 
+$renderable = new \mod_syllabus\output\report_page();
 
 $data = new stdClass();
 $data->tmp = $DB->get_records_sql('SELECT cc.id, cc.name, COUNT(cc.name) AS count
@@ -47,7 +48,7 @@ $data->tmp = $DB->get_records_sql('SELECT cc.id, cc.name, COUNT(cc.name) AS coun
                                                 {course_categories} cc
                                             WHERE
                                                 c.category = cc.id
-                                            GROUP BY name');
+                                            GROUP BY cc.id, cc.name');
 $data->courses = array();
 $data->labels = array();
 $data->completed = array();
@@ -63,10 +64,10 @@ foreach ($data->tmp as $tmp) {
                                             WHERE
                                                 s.course = c.id AND cc.id = ?
                                                 AND c.category = cc.id
-                                            GROUP BY s.course', array($tmp->id));
+                                            GROUP BY s.course, s.id', array($tmp->id));
 
     array_push($data->courses, $tmp->count);
-    array_push($data->labels, $tmp->name);
+    array_push($data->labels, $renderable->breadcrumb($tmp->id));
     array_push($data->completed, count($completed));
     array_push($data->empty, ($tmp->count - count($completed)));
 }
@@ -84,6 +85,5 @@ $chart->add_series($empty);
 $chart->set_labels($data->labels);
 
 echo $output->render($chart);
-$renderable = new \mod_syllabus\output\report_page();
 echo $output->render($renderable);
 echo $output->footer();

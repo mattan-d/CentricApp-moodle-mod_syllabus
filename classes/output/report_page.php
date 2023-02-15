@@ -71,9 +71,9 @@ class report_page implements renderable, templatable
                                     c.id,
                                     cc.id AS category,
                                     c.fullname AS course,
-                                    FROM_UNIXTIME(c.timemodified) AS timemodified,
-                                    FROM_UNIXTIME(c.startdate) AS startdate,
-                                    FROM_UNIXTIME(c.enddate) AS enddate,
+                                    c.timemodified AS timemodified,
+                                    c.startdate AS startdate,
+                                    c.enddate AS enddate,
                                     (SELECT 
                                             count(id)
                                         FROM
@@ -112,9 +112,9 @@ class report_page implements renderable, templatable
                 $row->type = get_string('withoutsyllabus', 'mod_syllabus');
 
             $row->course = '<a href="' . $CFG->wwwroot . '/course/view.php?id=' . $item->id . '">' . $item->course . '</a>';
-            $row->timemodified = $item->timemodified;
-            $row->startdate = $item->startdate;
-            $row->enddate = $item->enddate;
+            $row->timemodified = date('d/m/Y H:i:s', $item->timemodified);
+            $row->startdate = date('d/m/Y H:i:s', $item->startdate);
+            $row->enddate = date('d/m/Y H:i:s', $item->enddate);
             $row->category = $this->breadcrumb($item->category);
             $row->count = $item->count;
 
