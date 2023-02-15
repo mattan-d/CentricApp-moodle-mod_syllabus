@@ -28,19 +28,6 @@
         </tr>
     {{/rows}}
     </tbody>
-    <tfoot>
-    <tr>
-        <th>{{# str }} type, mod_syllabus {{/ str }}</th>
-        <th>{{# str }} course {{/ str }}</th>
-        <th>{{# str }} timemodified, mod_syllabus  {{/ str }}</th>
-        <th>{{# str }} startdate {{/ str }}</th>
-        <th>{{# str }} enddate {{/ str }}</th>
-        <th>{{# str }} category {{/ str }}</th>
-        <th>{{# str }} count, mod_syllabus {{/ str }}</th>
-        <th>{{# str }} owners, mod_syllabus {{/ str }}</th>
-        <th>{{# str }} links, mod_syllabus {{/ str }}</th>
-    </tr>
-    </tfoot>
 </table>
 
 
@@ -77,18 +64,18 @@
             initComplete: function () {
                 this.api().columns([0, 5]).every(function () {
                     var column = this;
+                    var header = $(column.header());
                     var select = $('<select><option value=""></option></select>')
-                            .appendTo($(column.footer()).empty())
+                            .appendTo(header)
                             .on('change', function () {
-                                var val = $(this).val();//$.fn.dataTable.util.escapeRegex($(this).val());
+                                var val = $(this).val(); //$.fn.dataTable.util.escapeRegex(                                        $(this).val()                                );
                                 column.search(val ? '^' + val + '$' : '', true, false).draw();
                             });
-
                     column.data().unique().sort().each(function (d, j) {
-                        select.append('<option value="' + d + '">' + d + '</option>');
+                        select.append('<option value="' + d + '">' + d + '</option>')
                     });
                 });
-            },
+            }
         });
     });
 </script>
