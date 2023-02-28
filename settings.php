@@ -54,6 +54,15 @@ if ($ADMIN->fulltree) {
         RESOURCELIB_DISPLAY_POPUP,
     );
 
+    defined('MOODLE_INTERNAL') || die();
+
+    $options = array();
+    $categories = $DB->get_records_menu('course_categories', array('parent' => 0), 'name ASC', 'id, name');
+    foreach ($categories as $catid => $catname) {
+        $options[$catid] = $catname;
+    }
+    $settings->add(new admin_setting_configmultiselect('syllabus/categorylist', get_string('category'), null, null, $options));
+
     //--- general settings -----------------------------------------------------------------------------------
     $settings->add(new admin_setting_configtext('syllabus/framesize',
         get_string('framesize', 'syllabus'), get_string('configframesize', 'syllabus'), 130, PARAM_INT));

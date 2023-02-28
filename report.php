@@ -42,13 +42,18 @@ echo $output->heading(get_string('reports', 'mod_syllabus'));
 $renderable = new \mod_syllabus\output\report_page();
 
 $data = new stdClass();
-$data->tmp = $DB->get_records_sql('SELECT cc.id, cc.name, COUNT(cc.name) AS count
-                                            FROM
-                                                {course} c,
-                                                {course_categories} cc
-                                            WHERE
-                                                c.category = cc.id
-                                            GROUP BY cc.id, cc.name');
+$data->tmp = $DB->get_records_sql('SELECT 
+                                            c.id, c.name, COUNT(DISTINCT cc.id) AS count
+                                        FROM
+                                            {course_categories} AS c
+                                                LEFT JOIN
+                                            {course_categories} AS c2 ON c.id = c2.parent
+                                                LEFT JOIN
+                                            {course} AS cc ON (cc.category = c.id
+                                                OR cc.category = c2.id)
+                                        WHERE c.id IN (' . implode(',', $renderable->relcategories()) . ')                                                                        
+                                        GROUP BY c.id
+                                        ORDER BY c.sortorder ASC');
 $data->courses = array();
 $data->labels = array();
 $data->completed = array();

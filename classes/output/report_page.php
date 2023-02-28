@@ -12,6 +12,25 @@ class report_page implements renderable, templatable
 
     public function __construct()
     {
+        $this->config = get_config('syllabus');
+    }
+
+    function relcategories()
+    {
+        global $DB;
+
+        $scategories = explode(',', $this->config->categorylist);
+        $data = array();
+        foreach ($scategories as $scategory) {
+            array_push($data, $scategory);
+
+            $ch = $DB->get_records_sql('SELECT id FROM {course_categories} WHERE path LIKE \'/' . $scategory . '/%\'');
+            foreach ($ch as $child) {
+                array_push($data, $child->id);
+            }
+        }
+
+        return array_reverse($data);
     }
 
     function breadcrumb($category, $data = array())
@@ -85,7 +104,8 @@ class report_page implements renderable, templatable
                                     {course} c,
                                     {course_categories} cc
                                 WHERE
-                                    c.category = cc.id');
+                                    c.category = cc.id
+                                    AND cc.id IN (' . implode(',', $this->relcategories()) . ')');
 
         $data->rows = array();
         foreach ($syllabus as $item) {
