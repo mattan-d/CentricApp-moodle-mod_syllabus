@@ -52,7 +52,7 @@ $data->tmp = $DB->get_records_sql('SELECT
                                             {course} AS cc ON (cc.category = c.id
                                                 OR cc.category = c2.id)
                                         WHERE c.id IN (' . implode(',', $renderable->relcategories()) . ')                                                                        
-                                        GROUP BY c.id
+                                        GROUP BY c.id, c.name
                                         ORDER BY c.sortorder ASC');
 $data->courses = array();
 $data->labels = array();
